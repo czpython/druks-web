@@ -1,0 +1,524 @@
+---
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import '@fontsource-variable/newsreader';
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090d16" />
+    <meta
+      name="description"
+      content="Build ships out of the box with Druks: autonomous software delivery from ticket to reviewed pull request, on the Claude and Codex subscriptions you already pay for. Druks is the self-hosted home for durable agent apps."
+    />
+    <meta property="og:title" content="Druks — from ticket to reviewed pull request" />
+    <meta
+      property="og:description"
+      content="Autonomous software delivery on the Claude and Codex subscriptions you already pay for. Durable runs that never lose their place."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://druks.ai/" />
+    <meta property="og:image" content="https://druks.ai/assets/social/druks-og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Druks, the thunder dragon" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://druks.ai/assets/social/druks-og.png" />
+    <link rel="canonical" href="https://druks.ai/" />
+    <title>Druks — autonomous software delivery from ticket to reviewed pull request</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script src="/scripts/pipeline.js" defer></script>
+  </head>
+  <body>
+    <svg class="glyph-sprite" aria-hidden="true" focusable="false">
+      <symbol id="glyph-bolt" viewBox="0 0 24 32">
+        <path d="M14.9 0 2.8 18h7.4L7.6 32l13.6-20.4h-7.6L14.9 0Z"></path>
+      </symbol>
+      <symbol id="glyph-pearl" viewBox="0 0 24 24">
+        <path d="M12 1.5a9.2 9.2 0 1 1 0 18.4 9.2 9.2 0 0 1 0-18.4Zm-3.6 4A5.7 5.7 0 0 0 6 8.7c-.2.8.8 1.3 1.4.7a7 7 0 0 1 3.4-2.1c.9-.2.8-1.5-.1-1.8a4.7 4.7 0 0 0-2.3 0Z"></path>
+        <path d="M5.2 19.2c2.1 1.9 4.8 3.1 7.7 3.1 2.4 0 4.7-.7 6.6-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
+      </symbol>
+    </svg>
+    <header class="bar">
+      <a class="brand" href="#top" aria-label="Druks home">
+        <img
+          class="brand-mark"
+          src="/assets/logos/web/DruksLogo_Cyan.svg"
+          width="3000"
+          height="3427"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="brand-word">druks</span>
+      </a>
+      <nav class="bar-nav" aria-label="Primary navigation">
+        <a class="bar-link" href="#build">build</a>
+        <a class="bar-link bar-link-wide" href="#capabilities">capabilities</a>
+        <a class="bar-link bar-link-wide" href="#extend">extend</a>
+        <a
+          class="bar-link bar-link-wide"
+          href="https://github.com/czpython/druks/blob/main/docs/index.md"
+          target="_blank"
+          rel="noopener noreferrer">docs</a
+        >
+        <a
+          class="bar-link bar-git"
+          href="https://github.com/czpython/druks"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Druks on GitHub"
+          ><svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"
+            ><path
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+            ></path></svg
+          ></a
+        >
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow eyebrow-myth">
+              <svg class="glyph glyph-bolt" aria-hidden="true" focusable="false"><use href="#glyph-bolt"></use></svg>
+              druk /drʊk/ <span aria-hidden="true">·</span> the thunder dragon
+            </p>
+            <h1 id="hero-title">
+              Autonomous code delivery, <span class="accent-cyan">from ticket to pull request.</span>
+            </h1>
+            <p class="hero-sub">
+              Druks is the self-hosted home for durable agent apps, running on the Claude and Codex subscriptions
+              you already pay for. The Build extension ships out of the box: runs that never lose their place.
+            </p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="#build-graph">See it in action</a>
+            </div>
+          </div>
+          <figure class="hero-mark" aria-label="Druks thunder dragon">
+            <img
+              class="hero-logo"
+              src="/assets/logos/web/DruksLogo_Cyan.svg"
+              width="3000"
+              height="3427"
+              fetchpriority="high"
+              alt=""
+              aria-hidden="true"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <section class="durable-sec" aria-labelledby="durable-title">
+        <div class="wrap">
+          <div class="section-intro">
+            <h2 id="durable-title">Agent work does not fit inside a request.</h2>
+            <p>
+              Processes restart, deploys happen, and people take time. Druks records every completed operation, so
+              recovery resumes from the last checkpoint instead of starting over.
+            </p>
+          </div>
+
+          <div class="durability-grid">
+            <div class="recovery-visual" aria-label="A workflow reuses completed operations after a process restart">
+              <div class="recovery-heading">
+                <strong>One durable run</strong>
+                <span>Postgres-backed checkpoints</span>
+              </div>
+              <div class="recovery-row">
+                <span class="sequence-label">first process</span>
+                <div class="checkpoint checkpoint-saved">
+                  <strong>load context</strong>
+                  <small>recorded</small>
+                </div>
+                <div class="checkpoint checkpoint-saved">
+                  <strong>gate reply</strong>
+                  <small>recorded</small>
+                </div>
+                <div class="checkpoint checkpoint-cut">
+                  <strong>agent call</strong>
+                  <small>interrupted</small>
+                </div>
+                <div class="checkpoint">
+                  <strong>publish</strong>
+                  <small>not reached</small>
+                </div>
+              </div>
+              <div class="restart-line">
+                <span><svg class="glyph glyph-bolt" aria-hidden="true" focusable="false"><use href="#glyph-bolt"></use></svg>process restarts</span>
+              </div>
+              <div class="recovery-row">
+                <span class="sequence-label">recovery</span>
+                <div class="checkpoint checkpoint-reused">
+                  <strong>reuse result</strong>
+                  <small>same value</small>
+                </div>
+                <div class="checkpoint checkpoint-reused">
+                  <strong>reuse reply</strong>
+                  <small>same answer</small>
+                </div>
+                <div class="checkpoint checkpoint-active">
+                  <strong>retry call</strong>
+                  <small>operation boundary</small>
+                </div>
+                <div class="checkpoint">
+                  <strong>continue</strong>
+                  <small>next operation</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="durability-notes">
+              <article>
+                <h3>Checkpointed</h3>
+                <p>Completed durable operations are reused. An interrupted operation may run again.</p>
+              </article>
+              <article>
+                <h3>On your time</h3>
+                <p>Typed gates park the workflow and resume the same durable run after a validated answer.</p>
+              </article>
+              <article>
+                <h3>Isolated</h3>
+                <p>Durable state lives outside the ephemeral host that runs each agent process.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pipe-sec" id="build" aria-labelledby="build-title">
+        <div class="wrap">
+          <div class="build-intro">
+            <p class="section-kicker">
+              <svg class="glyph glyph-bolt" aria-hidden="true" focusable="false"><use href="#glyph-bolt"></use></svg>
+              Included with Druks
+            </p>
+            <h2 id="build-title">Meet Build.</h2>
+            <p>
+              The Build extension turns tickets into pull requests: durable stages and isolated agents in one run
+              from intake to merge.
+            </p>
+          </div>
+
+          <div class="build-graph" id="build-graph" data-build-graph>
+            <div class="graph-chrome">
+              <span>build / durable run</span>
+              <div class="graph-legend" aria-label="Graph legend">
+                <span><i class="legend-runtime"></i>runtime</span>
+                <span><i class="legend-agent"></i>agent work</span>
+                <span>
+                  <svg class="glyph glyph-pearl" aria-hidden="true" focusable="false"><use href="#glyph-pearl"></use></svg>
+                  human gate
+                </span>
+              </div>
+            </div>
+
+            <div class="graph-canvas">
+              <span class="graph-lane graph-lane-control">control plane</span>
+              <span class="graph-lane graph-lane-agent">agent execution</span>
+
+              <svg class="graph-paths" viewBox="0 0 1200 420" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <linearGradient id="build-flow-gradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#4dd4f4"></stop>
+                    <stop offset="35%" stop-color="#4dd4f4"></stop>
+                    <stop offset="48%" stop-color="#a786ff"></stop>
+                    <stop offset="78%" stop-color="#a786ff"></stop>
+                    <stop offset="100%" stop-color="#4dd4f4"></stop>
+                  </linearGradient>
+                </defs>
+                <path
+                  class="graph-path-base"
+                  pathLength="100"
+                  d="M 90 130 H 290 C 372 130 404 290 490 290 H 890 C 976 290 1008 130 1090 130"
+                ></path>
+                <path
+                  class="graph-path-progress"
+                  id="trackFill"
+                  pathLength="100"
+                  d="M 90 130 H 290 C 372 130 404 290 490 290 H 890 C 976 290 1008 130 1090 130"
+                ></path>
+              </svg>
+
+              <div class="build-steps" id="stns" role="list" aria-label="Build run sequence">
+                <article class="stn node-ticket node-runtime" data-i="0" role="listitem">
+                  <span class="node-owner">tracker</span>
+                  <strong class="stn-name">ticket</strong>
+                  <span class="stn-note">work item received</span>
+                  <span class="node-output">recorded</span>
+                </article>
+                <article class="stn node-scope node-runtime" data-i="1" role="listitem">
+                  <span class="node-owner">druks</span>
+                  <strong class="stn-name">scope</strong>
+                  <span class="stn-note">structured brief</span>
+                  <span class="node-output">checkpoint saved</span>
+                </article>
+                <article class="stn node-plan node-agent" data-i="2" role="listitem">
+                  <span class="node-owner">planning agent</span>
+                  <strong class="stn-name">plan</strong>
+                  <span class="stn-note">typed execution plan</span>
+                  <span class="node-output node-output-gate">
+                    <svg class="glyph glyph-pearl" aria-hidden="true" focusable="false"><use href="#glyph-pearl"></use></svg>
+                    human approval
+                  </span>
+                </article>
+                <article class="stn node-implement node-agent" data-i="3" role="listitem">
+                  <span class="node-owner">coding agent</span>
+                  <strong class="stn-name">implement</strong>
+                  <span class="stn-note">repository changes</span>
+                  <span class="node-output">isolated sandbox</span>
+                </article>
+                <article class="stn node-review node-agent" data-i="4" role="listitem">
+                  <span class="node-owner">review agent</span>
+                  <strong class="stn-name">review</strong>
+                  <span class="stn-note">adversarial pass</span>
+                  <span class="node-output node-output-gate">
+                    <svg class="glyph glyph-pearl" aria-hidden="true" focusable="false"><use href="#glyph-pearl"></use></svg>
+                    review gate
+                  </span>
+                </article>
+                <article class="stn node-pr node-runtime" data-i="5" role="listitem">
+                  <span class="node-owner">GitHub</span>
+                  <strong class="stn-name">pull request</strong>
+                  <span class="stn-note">reviewable change</span>
+                  <span class="node-output node-output-gate">
+                    <svg class="glyph glyph-pearl" aria-hidden="true" focusable="false"><use href="#glyph-pearl"></use></svg>
+                    human merge
+                  </span>
+                </article>
+              </div>
+            </div>
+
+            <div class="graph-readout">
+              <span class="rstage" id="rstage">ticket</span>
+              <strong class="rmsg" id="rmsg">Work item picked up from the tracker</strong>
+              <span class="rmeta" id="rmeta">durable run / started</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="capabilities-sec" id="capabilities" aria-labelledby="capabilities-title">
+        <div class="wrap">
+          <div class="capability-heading">
+            <h2 id="capabilities-title">Six systems, one durable run.</h2>
+            <p>
+              Druks supplies the runtime that keeps every run durable, reactive, observable, and operable — Build
+              runs on all six.
+            </p>
+          </div>
+
+          <div class="capability-ledger">
+            <article class="capability-runtime" data-index="01">
+              <h3>Durable workflows</h3>
+              <p>
+                Checkpointed operations survive restarts. Queues, schedules, cancellation, and typed gates handle work
+                that outlives a request.
+              </p>
+            </article>
+            <article class="capability-agent" data-index="02">
+              <h3>Isolated agent runtime</h3>
+              <p>
+                Dispatch Claude or Codex through harnesses into Drukbox sandboxes, with validated outputs and recorded
+                transcripts.
+              </p>
+            </article>
+            <article class="capability-runtime" data-index="03">
+              <h3>Built-in webhooks and signals</h3>
+              <p>
+                Authenticate and normalize provider deliveries, deduplicate keyed retries, then publish at-least-once
+                signals to extension subscribers.
+              </p>
+            </article>
+            <article class="capability-agent" data-index="04">
+              <h3>Notifications and gates</h3>
+              <p>
+                Park a durable run, notify its people, validate the reply, and resume exactly where the run was
+                parked.
+              </p>
+            </article>
+            <article class="capability-runtime" data-index="05">
+              <h3>Events and read models</h3>
+              <p>
+                Compose run status, timelines, artifacts, current gates, and extension summaries into point-in-time
+                reads and SSE.
+              </p>
+            </article>
+            <article class="capability-agent" data-index="06">
+              <h3>Settings and diagnostics</h3>
+              <p>
+                Declare typed settings, inspect runs in the operator dashboard, manage schedules and harness controls,
+                and run extension-specific doctor checks.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="platform-sec" id="extend" aria-labelledby="extend-title">
+        <div class="wrap">
+          <div class="platform-layout">
+            <div class="platform-header">
+              <h2 id="extend-title">Build is the first Druks extension. Write yours.</h2>
+              <p>
+                An extension is an independently packaged Python distribution built on the public author SDK —
+                Druks supplies everything else: execution, recovery, and the operating surface.
+              </p>
+              <a
+                class="text-link"
+                href="https://github.com/czpython/druks/blob/main/docs/writing-an-extension.md"
+                target="_blank"
+                rel="noopener noreferrer">Read the extension guide <span aria-hidden="true">↗</span></a
+              >
+            </div>
+
+            <div class="extension-code-window" aria-label="Example extension entry point and Python class">
+              <div class="code-window-bar">
+                <span>druks-night-watch</span>
+                <span>installed package</span>
+              </div>
+              <pre><code><span class="code-comment"># pyproject.toml</span>
+<span class="code-name">[project.entry-points."druks.extensions"]</span>
+night_watch = <span class="code-string">"druks_night_watch.extension:NightWatch"</span>
+
+<span class="code-comment"># extension.py</span>
+<span class="code-keyword">from</span> druks.extensions <span class="code-keyword">import</span> Extension
+
+<span class="code-keyword">class</span> <span class="code-class">NightWatch</span>(Extension):
+    name = <span class="code-string">"night_watch"</span>
+    icon = <span class="code-string">"telescope"</span>
+    description = <span class="code-string">"Checks repositories after hours."</span></code></pre>
+              <div class="code-window-foot">
+                <span>distribution installed</span>
+                <span aria-hidden="true">→</span>
+                <span>extension registered</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="extension-mechanics">
+            <article>
+              <span class="mechanic-index">01</span>
+              <div>
+                <h3>Create an extension</h3>
+                <code>uv run druks create extension night_watch</code>
+              </div>
+            </article>
+            <article>
+              <span class="mechanic-index">02</span>
+              <div>
+                <h3>Install to register</h3>
+                <p>Entry-point discovery loads the package when Druks boots.</p>
+              </div>
+            </article>
+            <article>
+              <span class="mechanic-index">03</span>
+              <div>
+                <h3>Boot with everything wired</h3>
+                <p>API routes, prefixed tables, typed settings, and dashboard pages arrive namespaced to your extension — no glue code.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="action-sec" id="start" aria-labelledby="action-title">
+        <div class="wrap action-grid">
+          <div>
+            <svg class="glyph glyph-bolt action-bolt" aria-hidden="true" focusable="false"><use href="#glyph-bolt"></use></svg>
+            <h2 id="action-title">Get started.</h2>
+            <p>
+              One command brings up the stack, and Build takes the next ticket from your tracker. When your domain
+              needs an app of its own, the scaffold and the extension guide are waiting.
+            </p>
+            <div class="install-line" aria-label="One-line install command">
+              <span class="terminal-prompt" aria-hidden="true">$</span>
+              <code id="install-cmd">bash &lt;(curl -fsSL https://raw.githubusercontent.com/czpython/druks/main/scripts/install.sh)</code>
+              <button class="copy-btn" id="copy-install" type="button" aria-live="polite" aria-label="Copy install command">
+                copy
+              </button>
+            </div>
+            <script>
+              const copyBtn = document.getElementById('copy-install');
+              const installCmd = document.getElementById('install-cmd');
+              let copyResetTimer;
+              const showCopied = () => {
+                copyBtn.textContent = 'copied';
+                copyBtn.classList.add('copied');
+                clearTimeout(copyResetTimer);
+                copyResetTimer = setTimeout(() => {
+                  copyBtn.textContent = 'copy';
+                  copyBtn.classList.remove('copied');
+                }, 1800);
+              };
+              copyBtn?.addEventListener('click', async () => {
+                try {
+                  await navigator.clipboard.writeText(installCmd.textContent.trim());
+                  showCopied();
+                } catch {
+                  const range = document.createRange();
+                  range.selectNodeContents(installCmd);
+                  const selection = getSelection();
+                  selection.removeAllRanges();
+                  selection.addRange(range);
+                  if (document.execCommand('copy')) {
+                    selection.removeAllRanges();
+                    showCopied();
+                  }
+                }
+              });
+            </script>
+            <div class="cta-row">
+              <a
+                class="btn btn-primary"
+                href="https://github.com/czpython/druks/blob/main/docs/index.md"
+                target="_blank"
+                rel="noopener noreferrer">Read the docs <span aria-hidden="true">↗</span></a
+              >
+              <a
+                class="btn btn-ghost"
+                href="https://github.com/czpython/druks"
+                target="_blank"
+                rel="noopener noreferrer">View GitHub <span aria-hidden="true">↗</span></a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <div class="foot-grid">
+          <a class="foot-brand" href="#top" aria-label="Druks, back to the top">
+            <img
+              class="foot-mark"
+              src="/assets/logos/web/DruksLogo_White.svg"
+              width="3000"
+              height="3427"
+              alt=""
+              aria-hidden="true"
+            />
+            <span class="fb-word">druks</span>
+          </a>
+        </div>
+        <div class="foot-note">
+          <span>The self-hosted home for durable agent apps.</span>
+          <a
+            href="https://github.com/czpython/druks/blob/main/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer">MIT license</a
+          >
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>
