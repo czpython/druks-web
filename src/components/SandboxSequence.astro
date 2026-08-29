@@ -1,0 +1,823 @@
+<section class="sandbox-section section-band" aria-labelledby="sandbox-title">
+  <div class="wrap">
+    <div class="sandbox-intro">
+      <h2 class="section-title" id="sandbox-title">
+        <span>Sandboxed</span>
+      </h2>
+      <p>
+        By default, each agent call gets a short-lived sandbox with its workspace, tools, and credentials.
+      </p>
+    </div>
+
+    <div
+      class="sandbox-console"
+      data-sandbox-sequence
+      data-mode="idle"
+      data-phase="idle"
+      aria-label="An agent call running in an isolated sandbox"
+    >
+      <header class="sandbox-console-bar">
+        <div class="sandbox-console-brand">
+          <strong>Sandbox runtime</strong>
+          <span>Isolated environments for agent calls</span>
+        </div>
+      </header>
+
+      <div class="sandbox-console-body">
+        <aside class="sandbox-list" aria-label="Sandboxes">
+          <div class="sandbox-list-heading">
+            <span>sandboxes</span>
+            <span><b data-sandbox-count>0</b> active</span>
+          </div>
+
+          <div class="sandbox-instance" data-sandbox-instance>
+            <div class="sandbox-instance-heading">
+              <span class="sandbox-status-dot" aria-hidden="true"></span>
+              <strong>sb-a84f</strong>
+              <small data-sandbox-instance-state>starting</small>
+            </div>
+            <b>Checkout incident review</b>
+            <span>/workspace/checkout-api</span>
+            <div class="sandbox-instance-meta">
+              <span>2 vCPU</span>
+              <span>4 GB</span>
+              <span>short-lived</span>
+            </div>
+          </div>
+
+          <p class="sandbox-list-empty">No active sandboxes</p>
+        </aside>
+
+        <div class="sandbox-detail">
+          <div class="sandbox-detail-heading">
+            <div>
+              <strong data-sandbox-detail-id>new agent call</strong>
+              <span data-sandbox-detail-status>waiting to start</span>
+            </div>
+
+            <div class="sandbox-tabs" role="tablist" aria-label="Sandbox details">
+              <button type="button" role="tab" aria-selected="true" data-sandbox-tab="activity">Activity</button>
+              <button type="button" role="tab" aria-selected="false" data-sandbox-tab="network">Network Log</button>
+            </div>
+          </div>
+
+          <div class="sandbox-idle-message" aria-hidden="true">
+            <strong>Ready for an agent call</strong>
+            <span>A short-lived sandbox will appear here.</span>
+          </div>
+
+          <div class="sandbox-panel sandbox-activity" role="tabpanel" data-sandbox-panel="activity">
+            <dl class="sandbox-context">
+              <div data-sandbox-context="1"><dt>workspace</dt><dd>/workspace/checkout-api</dd></div>
+              <div data-sandbox-context="2"><dt>agent</dt><dd>codex</dd></div>
+              <div data-sandbox-context="2"><dt>tools</dt><dd>git · gh · pytest</dd></div>
+              <div data-sandbox-context="2"><dt>credentials</dt><dd>github · 48m</dd></div>
+            </dl>
+
+            <ol class="sandbox-events" aria-label="Sandbox activity">
+              <li data-sandbox-event="0"><time>00:00</time><span>create sandbox</span><b>starting</b></li>
+              <li data-sandbox-event="1"><time>00:01</time><span>attach /workspace/checkout-api</span><b>ready</b></li>
+              <li data-sandbox-event="2"><time>00:02</time><span>deliver git · gh · pytest · credentials</span><b>ready</b></li>
+              <li data-sandbox-event="3"><time>00:03</time><span>codex reviews checkout retry failure</span><b>running</b></li>
+              <li data-sandbox-event="4"><time>00:07</time><span>save prompt · transcript · output · cost</span><b>saved</b></li>
+              <li data-sandbox-event="5"><time>00:08</time><span>release sandbox</span><b>released</b></li>
+            </ol>
+          </div>
+
+          <div class="sandbox-panel" role="tabpanel" data-sandbox-panel="network" hidden>
+            <div class="sandbox-table-heading">
+              <span>host</span><span>hits</span><span>status</span>
+            </div>
+            <ol class="sandbox-table sandbox-network" aria-label="Sandbox network activity">
+              <li data-sandbox-network="0"><span>github.com</span><b>14</b><strong>allowed</strong></li>
+              <li data-sandbox-network="1"><span>api.github.com</span><b>6</b><strong>allowed</strong></li>
+              <li data-sandbox-network="2"><span>chatgpt.com</span><b>3</b><strong>allowed</strong></li>
+              <li class="is-blocked" data-sandbox-network="3"><span>pypi.org</span><b>1</b><strong>blocked</strong></li>
+            </ol>
+            <p class="sandbox-table-summary"><strong>3 allowed</strong><span>1 blocked</span></p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('[data-sandbox-sequence]').forEach((sequence) => {
+    if (!(sequence instanceof HTMLElement)) {
+      return;
+    }
+
+    const count = sequence.querySelector('[data-sandbox-count]');
+    const instanceState = sequence.querySelector('[data-sandbox-instance-state]');
+    const detailId = sequence.querySelector('[data-sandbox-detail-id]');
+    const detailStatus = sequence.querySelector('[data-sandbox-detail-status]');
+    const contextItems = Array.from(sequence.querySelectorAll('[data-sandbox-context]'));
+    const events = Array.from(sequence.querySelectorAll('[data-sandbox-event]'));
+    const networkRows = Array.from(sequence.querySelectorAll('[data-sandbox-network]'));
+    const tabs = Array.from(sequence.querySelectorAll('[data-sandbox-tab]'));
+    const panels = Array.from(sequence.querySelectorAll('[data-sandbox-panel]'));
+
+    if (
+      !(count instanceof HTMLElement) ||
+      !(instanceState instanceof HTMLElement) ||
+      !(detailId instanceof HTMLElement) ||
+      !(detailStatus instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    const steps = [
+      { phase: 'creating', state: 'starting', detail: 'creating microVM', tab: 'activity', visibleEvents: 1 },
+      { phase: 'workspace', state: 'ready', detail: 'workspace attached', tab: 'activity', visibleEvents: 2 },
+      { phase: 'capabilities', state: 'ready', detail: 'tools and credentials delivered', tab: 'activity', visibleEvents: 3 },
+      { phase: 'working', state: 'running', detail: 'agent working', tab: 'network', visibleEvents: 4 },
+      { phase: 'saving', state: 'complete', detail: 'change ready · record saved', tab: 'activity', visibleEvents: 5 },
+      { phase: 'released', state: 'released', detail: 'sandbox gone · record retained', tab: 'activity', visibleEvents: 6 },
+    ];
+
+    let activeStep = 0;
+    let activeTab = 'activity';
+    let mode = 'idle';
+    let timer = null;
+    let isVisible = false;
+
+    function clearTimer() {
+      if (timer !== null) {
+        window.clearTimeout(timer);
+        timer = null;
+      }
+    }
+
+    function showTab(name) {
+      activeTab = name;
+      tabs.forEach((tab) => {
+        if (!(tab instanceof HTMLButtonElement)) {
+          return;
+        }
+        const selected = tab.dataset.sandboxTab === name;
+        tab.setAttribute('aria-selected', String(selected));
+      });
+      panels.forEach((panel) => {
+        if (!(panel instanceof HTMLElement)) {
+          return;
+        }
+        panel.hidden = panel.dataset.sandboxPanel !== name;
+      });
+    }
+
+    function render() {
+      const step = steps[activeStep];
+      const started = mode !== 'idle';
+      const released = started && step.phase === 'released';
+
+      sequence.dataset.mode = mode;
+      sequence.dataset.phase = started ? step.phase : 'idle';
+      count.textContent = started && !released ? '1' : '0';
+      instanceState.textContent = started ? step.state : 'waiting';
+      detailId.textContent = started ? 'sb-a84f' : 'new agent call';
+      detailStatus.textContent = started ? step.detail : 'waiting to start';
+      showTab(started ? step.tab : activeTab);
+
+      contextItems.forEach((item) => {
+        if (!(item instanceof HTMLElement)) {
+          return;
+        }
+        const revealAt = Number(item.dataset.sandboxContext ?? 0);
+        item.classList.toggle('is-visible', started && activeStep >= revealAt);
+      });
+
+      events.forEach((event, index) => {
+        if (!(event instanceof HTMLElement)) {
+          return;
+        }
+        event.classList.toggle('is-visible', started && index < step.visibleEvents);
+        event.classList.toggle('is-current', started && index === step.visibleEvents - 1);
+      });
+
+      networkRows.forEach((row, index) => {
+        row.classList.toggle('is-visible', started && activeStep >= 3 && index <= activeStep);
+      });
+    }
+
+    function scheduleNext() {
+      clearTimer();
+      if (mode !== 'running' || !isVisible || document.hidden) {
+        return;
+      }
+      if (activeStep === steps.length - 1) {
+        mode = 'complete';
+        render();
+        timer = window.setTimeout(() => {
+          if (!isVisible || document.hidden) {
+            return;
+          }
+          activeStep = 0;
+          activeTab = 'activity';
+          mode = 'running';
+          render();
+          scheduleNext();
+        }, 2600);
+        return;
+      }
+      timer = window.setTimeout(() => {
+        activeStep += 1;
+        render();
+        scheduleNext();
+      }, 1350);
+    }
+
+    function start() {
+      clearTimer();
+      activeStep = 0;
+      activeTab = 'activity';
+      mode = 'running';
+      render();
+      scheduleNext();
+    }
+
+    tabs.forEach((tab) => {
+      if (!(tab instanceof HTMLButtonElement)) {
+        return;
+      }
+      tab.addEventListener('click', () => {
+        showTab(tab.dataset.sandboxTab ?? 'activity');
+      });
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target !== sequence) {
+            return;
+          }
+          isVisible = entry.isIntersecting;
+          if (!isVisible) {
+            clearTimer();
+            if (mode === 'running') {
+              mode = 'paused';
+              render();
+            }
+            return;
+          }
+          if (reducedMotion) {
+            activeStep = steps.length - 1;
+            mode = 'complete';
+            render();
+            return;
+          }
+          if (mode === 'paused') {
+            mode = 'running';
+            render();
+            scheduleNext();
+          } else {
+            start();
+          }
+        });
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(sequence);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && mode === 'running') {
+        clearTimer();
+        mode = 'paused';
+        render();
+      } else if (!document.hidden && isVisible && mode === 'paused') {
+        mode = 'running';
+        render();
+        scheduleNext();
+      }
+    });
+
+    render();
+  });
+</script>
+
+<style>
+  .sandbox-section {
+    overflow: hidden;
+  }
+
+  .sandbox-intro > p {
+    max-width: 58ch;
+    margin: 24px 0 0;
+    color: var(--text-mid);
+    font-size: 17px;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  .sandbox-console {
+    margin-top: clamp(42px, 5vw, 66px);
+    border: 1px solid var(--demo-border);
+    border-top: 3px solid var(--cyan);
+    background: var(--demo-canvas);
+    color: var(--text-mid);
+    font-family: var(--font-mono);
+  }
+
+  .sandbox-console-bar,
+  .sandbox-list-heading,
+  .sandbox-instance-heading,
+  .sandbox-detail-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .sandbox-console-bar {
+    min-height: 58px;
+    padding: 11px 16px 11px 20px;
+    border-bottom: 1px solid var(--demo-border);
+    background: var(--demo-header);
+  }
+
+  .sandbox-console-brand {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .sandbox-console-brand strong {
+    color: var(--cyan);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+  }
+
+  .sandbox-console-brand span {
+    color: var(--text-muted);
+    font-size: 8px;
+  }
+
+  .sandbox-console button:focus-visible {
+    outline: 1px solid var(--cyan);
+    outline-offset: 3px;
+  }
+
+  .sandbox-console-body {
+    display: grid;
+    min-height: 520px;
+    grid-template-columns: 250px minmax(0, 1fr);
+  }
+
+  .sandbox-list {
+    padding: 18px 12px;
+    border-right: 1px solid var(--demo-border);
+    background: var(--demo-subpanel);
+  }
+
+  .sandbox-list-heading {
+    padding: 0 4px 13px;
+    color: var(--text-muted);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .sandbox-list-heading b {
+    color: var(--cyan);
+    font-weight: 600;
+  }
+
+  .sandbox-instance {
+    padding: 14px;
+    border: 1px solid var(--border-soft);
+    transition:
+      max-height 240ms var(--ease-out),
+      padding 240ms var(--ease-out),
+      border-width 240ms ease,
+      opacity 240ms ease,
+      transform 240ms var(--ease-out),
+      border-color 240ms ease,
+      background 240ms ease;
+  }
+
+  .sandbox-instance {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 14px;
+    border-width: 0;
+    background: rgb(77 212 244 / 5%);
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  .sandbox-console:not([data-phase='idle']):not([data-phase='released']) .sandbox-instance {
+    max-height: 180px;
+    padding: 14px;
+    border-width: 1px;
+    border-color: rgb(77 212 244 / 54%);
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .sandbox-instance-heading {
+    justify-content: flex-start;
+  }
+
+  .sandbox-status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--cyan);
+    box-shadow: 0 0 10px rgb(77 212 244 / 50%);
+  }
+
+  .sandbox-console[data-phase='working'] .sandbox-status-dot {
+    animation: sandbox-status-pulse 1.1s ease-in-out infinite;
+  }
+
+  .sandbox-instance-heading strong {
+    color: var(--text);
+    font-size: 10px;
+  }
+
+  .sandbox-instance-heading small {
+    margin-left: auto;
+    color: var(--cyan);
+    font-size: 7px;
+    text-transform: uppercase;
+  }
+
+  .sandbox-instance > b,
+  .sandbox-instance > span {
+    display: block;
+  }
+
+  .sandbox-instance > b {
+    margin-top: 13px;
+    color: var(--text-mid);
+    font-size: 9px;
+    font-weight: 560;
+  }
+
+  .sandbox-instance > span {
+    margin-top: 5px;
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 7.5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sandbox-instance-meta {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-soft);
+    color: var(--text-muted);
+    font-size: 7px;
+  }
+
+  .sandbox-list-empty {
+    margin: 28px 4px 0;
+    color: var(--text-muted);
+    font-size: 8px;
+    text-align: center;
+  }
+
+  .sandbox-console:not([data-phase='idle']):not([data-phase='released']) .sandbox-list-empty {
+    display: none;
+  }
+
+  .sandbox-detail {
+    position: relative;
+    min-width: 0;
+  }
+
+  .sandbox-idle-message {
+    position: absolute;
+    inset: 70px 0 0;
+    z-index: 1;
+    display: grid;
+    place-content: center;
+    gap: 8px;
+    color: var(--text-muted);
+    text-align: center;
+    transition: opacity 180ms ease;
+  }
+
+  .sandbox-idle-message strong {
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 560;
+  }
+
+  .sandbox-idle-message span {
+    font-size: 8px;
+  }
+
+  .sandbox-console:not([data-phase='idle']) .sandbox-idle-message {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sandbox-detail-heading {
+    min-height: 70px;
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--demo-border);
+  }
+
+  .sandbox-detail-heading > div:first-child strong,
+  .sandbox-detail-heading > div:first-child span {
+    display: block;
+  }
+
+  .sandbox-detail-heading > div:first-child strong {
+    color: var(--text);
+    font-size: 11px;
+  }
+
+  .sandbox-detail-heading > div:first-child span {
+    margin-top: 5px;
+    color: var(--cyan);
+    font-size: 8px;
+  }
+
+  .sandbox-tabs {
+    display: flex;
+    align-self: stretch;
+  }
+
+  .sandbox-tabs button {
+    position: relative;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 8px;
+  }
+
+  .sandbox-tabs button[aria-selected='true'] {
+    color: var(--text);
+  }
+
+  .sandbox-tabs button[aria-selected='true']::after {
+    position: absolute;
+    right: 10px;
+    bottom: -15px;
+    left: 10px;
+    height: 2px;
+    background: var(--cyan);
+    content: '';
+  }
+
+  .sandbox-panel {
+    padding: 26px 22px;
+    transition: opacity 180ms ease;
+  }
+
+  .sandbox-console[data-phase='idle'] .sandbox-panel {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .sandbox-context {
+    display: grid;
+    margin: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sandbox-context > div {
+    padding: 0 14px 17px 0;
+    opacity: 0.2;
+    transition: opacity 180ms ease;
+  }
+
+  .sandbox-context > div.is-visible {
+    opacity: 1;
+  }
+
+  .sandbox-context dt,
+  .sandbox-context dd {
+    margin: 0;
+  }
+
+  .sandbox-context dt {
+    color: var(--text-muted);
+    font-size: 7px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .sandbox-context dd {
+    margin-top: 6px;
+    overflow: hidden;
+    color: var(--text-mid);
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sandbox-events,
+  .sandbox-table {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sandbox-events {
+    margin-top: 18px;
+  }
+
+  .sandbox-events li,
+  .sandbox-table li,
+  .sandbox-table-heading {
+    display: grid;
+    min-width: 0;
+    align-items: center;
+  }
+
+  .sandbox-events li {
+    min-height: 42px;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    gap: 14px;
+    border-bottom: 1px solid var(--border-soft);
+    opacity: 0.18;
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      opacity 180ms ease;
+  }
+
+  .sandbox-events li.is-visible {
+    opacity: 1;
+  }
+
+  .sandbox-events li.is-current {
+    background: linear-gradient(90deg, rgb(77 212 244 / 8%), transparent 76%);
+  }
+
+  .sandbox-events time,
+  .sandbox-events b {
+    color: var(--text-muted);
+    font-size: 7.5px;
+    font-weight: 450;
+  }
+
+  .sandbox-events span {
+    overflow: hidden;
+    color: var(--text-mid);
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sandbox-events li.is-current span,
+  .sandbox-events li.is-current b {
+    color: var(--cyan);
+  }
+
+  .sandbox-table-heading,
+  .sandbox-table li {
+    grid-template-columns: minmax(0, 1fr) 70px 86px;
+    gap: 16px;
+  }
+
+  .sandbox-table-heading {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 7px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .sandbox-table li {
+    min-height: 50px;
+    border-bottom: 1px solid var(--border-soft);
+    opacity: 0.18;
+    transition: opacity 180ms ease;
+  }
+
+  .sandbox-table li.is-visible {
+    opacity: 1;
+  }
+
+  .sandbox-table li span {
+    overflow: hidden;
+    color: var(--text-mid);
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sandbox-table li b {
+    color: var(--text-muted);
+    font-size: 8px;
+    font-weight: 450;
+  }
+
+  .sandbox-table li strong {
+    color: #94d82d;
+    font-size: 8px;
+    font-weight: 560;
+    text-transform: uppercase;
+  }
+
+  .sandbox-table li.is-blocked strong {
+    color: #ff6b7b;
+  }
+
+  .sandbox-table-summary {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0 0;
+    font-size: 8px;
+  }
+
+  .sandbox-table-summary strong {
+    color: #94d82d;
+  }
+
+  .sandbox-table-summary span {
+    color: #ff6b7b;
+  }
+
+  @keyframes sandbox-status-pulse {
+    0%,
+    100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.42; transform: scale(1.6); }
+  }
+
+  @media (max-width: 900px) {
+    .sandbox-console-body {
+      grid-template-columns: 1fr;
+    }
+
+    .sandbox-list {
+      border-right: 0;
+      border-bottom: 1px solid var(--border);
+    }
+  }
+
+  @media (max-width: 680px) {
+    .sandbox-intro > p {
+      font-size: 16px;
+    }
+
+    .sandbox-console-brand span {
+      display: none;
+    }
+
+    .sandbox-console-body {
+      min-height: 620px;
+    }
+
+    .sandbox-detail-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .sandbox-tabs {
+      width: 100%;
+      min-height: 42px;
+    }
+
+    .sandbox-tabs button {
+      flex: 1;
+      padding: 0 5px;
+    }
+
+    .sandbox-tabs button[aria-selected='true']::after {
+      bottom: -14px;
+    }
+
+    .sandbox-context {
+      grid-template-columns: 1fr;
+    }
+
+    .sandbox-events li {
+      grid-template-columns: 44px minmax(0, 1fr);
+    }
+
+    .sandbox-events b {
+      display: none;
+    }
+
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sandbox-status-dot {
+      animation: none !important;
+    }
+
+    .sandbox-instance,
+    .sandbox-context > div,
+    .sandbox-events li,
+    .sandbox-table li {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,796 @@
+<section class="durable-section section-band" aria-labelledby="survive-title">
+  <div class="wrap">
+    <div class="section-heading narrow-heading" id="survive">
+      <h2 class="section-title" id="survive-title">
+        <span>Durable</span>
+      </h2>
+      <p>
+        Druks checkpoints the run as it moves. After a crash or deploy, completed work is reused and the interrupted operation can run again.
+      </p>
+    </div>
+
+    <div class="run-trace" data-run-trace data-phase="interrupted">
+      <div class="trace-toolbar">
+        <div>
+          <strong>incident report</strong>
+          <span>API outage</span>
+        </div>
+        <strong class="trace-run-state" data-trace-run-state aria-live="polite">interrupted</strong>
+      </div>
+
+      <div class="trace-frame">
+        <div class="trace-axis" aria-hidden="true">
+          <span>operation</span>
+          <div class="trace-axis-time">
+            <span>0s</span>
+            <span>4s</span>
+            <span>8s</span>
+            <span>12s</span>
+          </div>
+          <span>state</span>
+        </div>
+
+        <ol class="trace-rows" aria-label="Execution trace for an API outage incident report">
+          <li class="trace-row" data-trace-row="context" data-state="completed">
+            <div class="trace-label">
+              <span>01</span>
+              <strong>build timeline</strong>
+            </div>
+            <div class="trace-track" aria-hidden="true">
+              <span class="trace-bar trace-bar-context"><i></i></span>
+            </div>
+            <span class="trace-state" data-trace-state>done</span>
+          </li>
+
+          <li class="trace-row" data-trace-row="approval" data-state="completed">
+            <div class="trace-label">
+              <span>02</span>
+              <strong>review logs</strong>
+            </div>
+            <div class="trace-track" aria-hidden="true">
+              <span class="trace-bar trace-bar-approval"><i></i></span>
+            </div>
+            <span class="trace-state" data-trace-state>done</span>
+          </li>
+
+          <li class="trace-row trace-row-agent" data-trace-row="agent" data-state="interrupted">
+            <div class="trace-label">
+              <span>03</span>
+              <strong>draft report</strong>
+            </div>
+            <div class="trace-track trace-attempts" aria-hidden="true">
+              <span class="trace-attempt trace-attempt-one">
+                <i></i>
+                <span>attempt 1</span>
+                <b data-trace-first-attempt-state>stopped</b>
+              </span>
+              <span class="trace-attempt trace-attempt-two">
+                <i></i>
+                <span>attempt 2</span>
+                <b data-trace-attempt-state>waiting</b>
+              </span>
+            </div>
+            <span class="trace-state" data-trace-state>stopped</span>
+          </li>
+
+          <li class="trace-row" data-trace-row="publish" data-state="waiting">
+            <div class="trace-label">
+              <span>04</span>
+              <strong>request review</strong>
+            </div>
+            <div class="trace-track" aria-hidden="true">
+              <span class="trace-bar trace-bar-publish"><i></i></span>
+            </div>
+            <span class="trace-state" data-trace-state>waiting</span>
+          </li>
+        </ol>
+
+        <div class="trace-restart-guide" aria-hidden="true">
+          <span>restart</span>
+          <i></i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('[data-run-trace]').forEach((trace) => {
+    if (!(trace instanceof HTMLElement)) {
+      return;
+    }
+
+    const runState = trace.querySelector('[data-trace-run-state]');
+    const firstAttemptState = trace.querySelector('[data-trace-first-attempt-state]');
+    const attemptState = trace.querySelector('[data-trace-attempt-state]');
+    const rows = {
+      context: trace.querySelector('[data-trace-row="context"]'),
+      approval: trace.querySelector('[data-trace-row="approval"]'),
+      agent: trace.querySelector('[data-trace-row="agent"]'),
+      publish: trace.querySelector('[data-trace-row="publish"]'),
+    };
+
+    if (
+      !(runState instanceof HTMLElement) ||
+      !(firstAttemptState instanceof HTMLElement) ||
+      !(attemptState instanceof HTMLElement) ||
+      Object.values(rows).some((row) => !(row instanceof HTMLElement))
+    ) {
+      return;
+    }
+
+    const phases = {
+      starting: {
+        runState: 'starting',
+        firstAttempt: 'waiting',
+        attempt: 'waiting',
+        rows: {
+          context: ['waiting', 'waiting'],
+          approval: ['waiting', 'waiting'],
+          agent: ['waiting', 'waiting'],
+          publish: ['waiting', 'waiting'],
+        },
+      },
+      timeline: {
+        runState: 'building timeline',
+        firstAttempt: 'waiting',
+        attempt: 'waiting',
+        rows: {
+          context: ['running', 'building'],
+          approval: ['waiting', 'waiting'],
+          agent: ['waiting', 'waiting'],
+          publish: ['waiting', 'waiting'],
+        },
+      },
+      logs: {
+        runState: 'reviewing logs',
+        firstAttempt: 'waiting',
+        attempt: 'waiting',
+        rows: {
+          context: ['completed', 'done'],
+          approval: ['running', 'reviewing'],
+          agent: ['waiting', 'waiting'],
+          publish: ['waiting', 'waiting'],
+        },
+      },
+      'first-attempt': {
+        runState: 'drafting report',
+        firstAttempt: 'running',
+        attempt: 'waiting',
+        rows: {
+          context: ['completed', 'done'],
+          approval: ['completed', 'done'],
+          agent: ['first-attempt', 'drafting'],
+          publish: ['waiting', 'waiting'],
+        },
+      },
+      interrupted: {
+        runState: 'interrupted',
+        firstAttempt: 'stopped',
+        attempt: 'waiting',
+        rows: {
+          context: ['completed', 'done'],
+          approval: ['completed', 'done'],
+          agent: ['interrupted', 'stopped'],
+          publish: ['waiting', 'waiting'],
+        },
+      },
+      recovering: {
+        runState: 'resuming',
+        firstAttempt: 'stopped',
+        attempt: 'waiting',
+        rows: {
+          context: ['reused', 'kept'],
+          approval: ['reused', 'kept'],
+          agent: ['interrupted', 'stopped'],
+          publish: ['waiting', 'waiting'],
+        },
+      },
+      retrying: {
+        runState: 'drafting report',
+        firstAttempt: 'stopped',
+        attempt: 'running',
+        rows: {
+          context: ['reused', 'kept'],
+          approval: ['reused', 'kept'],
+          agent: ['running', 'running'],
+          publish: ['waiting', 'waiting'],
+        },
+      },
+      publishing: {
+        runState: 'sending for review',
+        firstAttempt: 'stopped',
+        attempt: 'completed',
+        rows: {
+          context: ['reused', 'kept'],
+          approval: ['reused', 'kept'],
+          agent: ['completed', 'done'],
+          publish: ['running', 'running'],
+        },
+      },
+      complete: {
+        runState: 'completed',
+        firstAttempt: 'stopped',
+        attempt: 'completed',
+        rows: {
+          context: ['reused', 'kept'],
+          approval: ['reused', 'kept'],
+          agent: ['completed', 'done'],
+          publish: ['completed', 'done'],
+        },
+      },
+    };
+
+    let phase = 'interrupted';
+    let isVisible = false;
+    const timers = new Set();
+
+    function clearTimers() {
+      timers.forEach((timer) => window.clearTimeout(timer));
+      timers.clear();
+    }
+
+    function later(nextPhase, delay) {
+      const timer = window.setTimeout(() => {
+        timers.delete(timer);
+        render(nextPhase);
+      }, delay);
+      timers.add(timer);
+    }
+
+    function render(nextPhase) {
+      phase = nextPhase;
+      const state = phases[phase];
+      trace.dataset.phase = phase;
+      runState.textContent = state.runState;
+      firstAttemptState.textContent = state.firstAttempt;
+      attemptState.textContent = state.attempt;
+
+      Object.entries(state.rows).forEach(([name, [rowState, label]]) => {
+        const row = rows[name];
+        row.dataset.state = rowState;
+        const rowLabel = row.querySelector('[data-trace-state]');
+        if (rowLabel instanceof HTMLElement) {
+          rowLabel.textContent = label;
+        }
+      });
+    }
+
+    function replay() {
+      clearTimers();
+
+      if (!isVisible || document.hidden) {
+        return;
+      }
+
+      render('starting');
+
+      if (reducedMotion) {
+        render('interrupted');
+        return;
+      }
+
+      later('timeline', 300);
+      later('logs', 1450);
+      later('first-attempt', 2600);
+      later('interrupted', 3950);
+      later('recovering', 5150);
+      later('retrying', 6250);
+      later('publishing', 8150);
+      later('complete', 9500);
+      const loopTimer = window.setTimeout(() => {
+        timers.delete(loopTimer);
+        replay();
+      }, 12100);
+      timers.add(loopTimer);
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target !== trace) {
+            return;
+          }
+          isVisible = entry.isIntersecting;
+          if (!isVisible) {
+            clearTimers();
+            return;
+          }
+          if (reducedMotion) {
+            render('complete');
+            return;
+          }
+          replay();
+        });
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(trace);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        clearTimers();
+      } else if (isVisible && !reducedMotion) {
+        replay();
+      }
+    });
+
+    render('interrupted');
+  });
+</script>
+
+<style>
+  .durable-section {
+    overflow: hidden;
+  }
+
+  .run-trace {
+    margin-top: clamp(40px, 5vw, 64px);
+    overflow: hidden;
+    border: 1px solid var(--demo-border);
+    border-top: 3px solid var(--cyan);
+    background: var(--demo-canvas);
+    color: #bcc3ce;
+    font-family: var(--font-mono);
+  }
+
+  .trace-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+  }
+
+  .trace-toolbar {
+    min-height: 62px;
+    padding: 14px clamp(18px, 2.4vw, 30px);
+    border-bottom: 1px solid var(--demo-border);
+    background: var(--demo-header);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .trace-toolbar > div {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .trace-toolbar span {
+    color: #9da6b4;
+  }
+
+  .trace-toolbar strong {
+    color: #eef1f4;
+    font-weight: 600;
+  }
+
+  .trace-run-state {
+    margin-left: auto;
+    color: #c5ccd5 !important;
+  }
+
+  .run-trace:not([data-phase='interrupted']) .trace-run-state {
+    color: var(--cyan-bright) !important;
+  }
+
+  .trace-frame {
+    position: relative;
+    padding: 22px clamp(18px, 2.4vw, 30px) 26px;
+  }
+
+  .trace-axis,
+  .trace-row {
+    --trace-label: clamp(142px, 15vw, 202px);
+    --trace-state: 112px;
+    display: grid;
+    grid-template-columns: var(--trace-label) minmax(0, 1fr) var(--trace-state);
+    column-gap: 20px;
+  }
+
+  .trace-axis {
+    align-items: center;
+    padding-bottom: 14px;
+    color: #969eaa;
+    font-size: 7px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .trace-axis > :last-child {
+    text-align: right;
+  }
+
+  .trace-axis-time {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .trace-rows {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .trace-row {
+    min-height: 70px;
+    align-items: center;
+    border-top: 1px solid rgb(151 163 178 / 14%);
+  }
+
+  .trace-row:last-child {
+    border-bottom: 1px solid rgb(151 163 178 / 14%);
+  }
+
+  .trace-row-agent {
+    min-height: 104px;
+  }
+
+  .trace-label {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .trace-label span {
+    color: #8f98a6;
+    font-size: 8px;
+  }
+
+  .trace-label strong {
+    color: #f0f2f4;
+    font-size: 13px;
+    font-weight: 560;
+  }
+
+  .trace-track {
+    position: relative;
+    height: 34px;
+    background:
+      linear-gradient(90deg, rgb(151 163 178 / 10%) 1px, transparent 1px) 0 0 / 25% 100%,
+      rgb(45 49 57 / 58%);
+  }
+
+  .trace-attempts {
+    height: 74px;
+  }
+
+  .trace-bar,
+  .trace-attempt {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .trace-bar {
+    top: 7px;
+    height: 20px;
+    background: rgb(129 143 157 / 13%);
+    box-shadow: inset 0 0 0 1px rgb(151 163 178 / 32%);
+  }
+
+  .trace-bar::before {
+    position: absolute;
+    z-index: 2;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: #8c99a7;
+    content: '';
+  }
+
+  .trace-bar i,
+  .trace-attempt i {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background: linear-gradient(90deg, rgb(151 163 178 / 24%), rgb(151 163 178 / 7%));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 900ms var(--ease-out);
+  }
+
+  .trace-bar-context {
+    left: 2%;
+    width: 22%;
+  }
+
+  .trace-bar-approval {
+    left: 27%;
+    width: 17%;
+  }
+
+  .trace-bar-publish {
+    left: 86%;
+    width: 12%;
+    border: 1px dashed rgb(151 163 178 / 44%);
+    background: rgb(151 163 178 / 4%);
+    box-shadow: none;
+  }
+
+  .trace-bar-publish::before {
+    display: none;
+  }
+
+  .trace-bar-publish i {
+    background: linear-gradient(90deg, rgb(77 212 244 / 38%), rgb(77 212 244 / 12%));
+    transform: scaleX(0);
+    transition: transform 950ms var(--ease-out);
+  }
+
+  .trace-attempt {
+    display: grid;
+    min-width: 0;
+    height: 28px;
+    align-items: center;
+    grid-template-columns: 1fr auto;
+    padding: 0 9px;
+    font-size: 7px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .trace-attempt span,
+  .trace-attempt b {
+    position: relative;
+    z-index: 2;
+  }
+
+  .trace-attempt b {
+    font-weight: 560;
+  }
+
+  .trace-attempt-one {
+    top: 7px;
+    left: 46%;
+    width: 17%;
+    background: rgb(202 208 216 / 9%);
+    box-shadow: inset 0 0 0 1px rgb(202 208 216 / 42%);
+    color: #d8dde3;
+  }
+
+  .trace-attempt-one i {
+    background: linear-gradient(90deg, rgb(202 208 216 / 15%), transparent);
+    transition-duration: 1050ms;
+  }
+
+  .trace-attempt-two {
+    right: 15%;
+    bottom: 7px;
+    width: 19%;
+    border: 1px dashed rgb(151 163 178 / 38%);
+    color: #aeb8c6;
+  }
+
+  .trace-attempt-two i {
+    background: linear-gradient(90deg, rgb(77 212 244 / 42%), rgb(77 212 244 / 13%));
+    transform: scaleX(0);
+    transition: transform 1550ms var(--ease-out);
+  }
+
+  .trace-state {
+    color: #a6afbc;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    text-align: right;
+    text-transform: uppercase;
+  }
+
+  .trace-row[data-state='completed'] .trace-state,
+  .trace-row[data-state='reused'] .trace-state {
+    color: #b9c1cb;
+  }
+
+  .trace-row[data-state='running'] .trace-state {
+    color: var(--cyan-bright);
+  }
+
+  .trace-row[data-state='running'] .trace-label strong,
+  .trace-row[data-state='first-attempt'] .trace-label strong,
+  .trace-row[data-state='first-attempt'] .trace-state {
+    color: var(--cyan-bright);
+  }
+
+  .trace-row[data-state='running'] .trace-bar::before {
+    background: var(--cyan);
+  }
+
+  .trace-row[data-state='running'] .trace-bar i,
+  .trace-row-agent[data-state='first-attempt'] .trace-attempt-one i {
+    background: linear-gradient(90deg, rgb(77 212 244 / 44%), rgb(77 212 244 / 12%));
+  }
+
+  .trace-row[data-state='running'] .trace-bar i,
+  .trace-row[data-state='completed'] .trace-bar i,
+  .trace-row[data-state='reused'] .trace-bar i,
+  .trace-row-agent[data-state='first-attempt'] .trace-attempt-one i,
+  .trace-row-agent[data-state='interrupted'] .trace-attempt-one i,
+  .trace-row-agent[data-state='running'] .trace-attempt-one i,
+  .trace-row-agent[data-state='completed'] .trace-attempt-one i {
+    transform: scaleX(1);
+  }
+
+  .trace-row-agent[data-state='interrupted'] .trace-state {
+    color: #d8dde3;
+  }
+
+  .trace-restart-guide {
+    --trace-label: clamp(142px, 15vw, 202px);
+    --trace-state: 112px;
+    position: absolute;
+    z-index: 3;
+    top: 58px;
+    right: calc(clamp(18px, 2.4vw, 30px) + var(--trace-state) + 20px);
+    bottom: 26px;
+    left: calc(clamp(18px, 2.4vw, 30px) + var(--trace-label) + 20px);
+    pointer-events: none;
+  }
+
+  .trace-restart-guide i {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 64%;
+    width: 1px;
+    border-left: 1px dashed rgb(194 202 212 / 38%);
+    transition:
+      border-color 220ms ease,
+      box-shadow 220ms ease;
+  }
+
+  .trace-restart-guide span {
+    position: absolute;
+    top: -1px;
+    left: 64%;
+    padding: 3px 7px;
+    background: #242831;
+    color: #aab2be;
+    font-size: 7px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transform: translateX(-50%);
+    transition:
+      background 220ms ease,
+      color 220ms ease;
+  }
+
+  .run-trace[data-phase='recovering'] .trace-restart-guide i,
+  .run-trace[data-phase='retrying'] .trace-restart-guide i,
+  .run-trace[data-phase='publishing'] .trace-restart-guide i,
+  .run-trace[data-phase='complete'] .trace-restart-guide i {
+    border-color: var(--cyan);
+    box-shadow: 0 0 14px rgb(77 212 244 / 25%);
+  }
+
+  .run-trace[data-phase='recovering'] .trace-restart-guide span,
+  .run-trace[data-phase='retrying'] .trace-restart-guide span,
+  .run-trace[data-phase='publishing'] .trace-restart-guide span,
+  .run-trace[data-phase='complete'] .trace-restart-guide span {
+    background: var(--cyan);
+    color: var(--cyan-ink);
+  }
+
+  .run-trace[data-phase='retrying'] .trace-attempt-two i,
+  .run-trace[data-phase='publishing'] .trace-attempt-two i,
+  .run-trace[data-phase='complete'] .trace-attempt-two i,
+  .run-trace[data-phase='publishing'] .trace-bar-publish i,
+  .run-trace[data-phase='complete'] .trace-bar-publish i {
+    transform: scaleX(1);
+  }
+
+  .run-trace[data-phase='retrying'] .trace-attempt-two,
+  .run-trace[data-phase='publishing'] .trace-attempt-two,
+  .run-trace[data-phase='complete'] .trace-attempt-two {
+    border-style: solid;
+    color: #effcff;
+  }
+
+  .run-trace[data-phase='publishing'] .trace-bar-publish,
+  .run-trace[data-phase='complete'] .trace-bar-publish {
+    border-color: rgb(77 212 244 / 48%);
+    border-style: solid;
+  }
+
+  .run-trace[data-phase='starting'] .trace-bar i,
+  .run-trace[data-phase='starting'] .trace-attempt i {
+    transition: none;
+  }
+
+  @media (max-width: 760px) {
+    .trace-toolbar {
+      flex-wrap: wrap;
+      gap: 6px 14px;
+    }
+
+    .trace-axis {
+      display: none;
+    }
+
+    .trace-frame {
+      padding-top: 18px;
+    }
+
+    .trace-row {
+      display: grid;
+      min-height: 94px;
+      grid-template-columns: 1fr auto;
+      column-gap: 12px;
+      padding: 14px 0;
+    }
+
+    .trace-row-agent {
+      min-height: 126px;
+    }
+
+    .trace-track {
+      grid-column: 1 / -1;
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .trace-state {
+      align-self: baseline;
+    }
+
+    .trace-restart-guide {
+      display: none;
+    }
+
+    .trace-attempt-one {
+      left: 38%;
+      width: 24%;
+    }
+
+    .trace-attempt-two {
+      right: 4%;
+      width: 31%;
+    }
+
+    .trace-bar-context {
+      width: 34%;
+    }
+
+    .trace-bar-approval {
+      left: 38%;
+      width: 25%;
+    }
+
+    .trace-bar-publish {
+      right: 2%;
+      left: auto;
+      width: 30%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .trace-attempt {
+      min-width: 0;
+      padding-inline: 7px;
+    }
+
+    .trace-attempt b {
+      display: none;
+    }
+  }
+
+  @media (min-width: 761px) and (max-width: 1050px) {
+    .trace-attempt b {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trace-bar i,
+    .trace-attempt i,
+    .trace-restart-guide i,
+    .trace-restart-guide span {
+      transition: none;
+    }
+
+  }
+</style>

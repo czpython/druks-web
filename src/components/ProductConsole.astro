@@ -1,0 +1,211 @@
+---
+const apps = [
+  {
+    id: 'software-factory',
+    label: 'Software Factory',
+    icon: 'hammer',
+    description: 'Takes a ticket through planning, implementation, review, and pull request.',
+    kicker: 'SOFTWARE FACTORY',
+    title: 'From ticket to reviewed pull request.',
+    summary: 'A coding run with checkpoints, evidence, and a review gate before anything ships.',
+    steps: 'ticket|plan|implement|review|pull request',
+  },
+  {
+    id: 'review',
+    label: 'Review',
+    icon: 'git-pull-request',
+    description: 'Reviews pull requests and posts clear findings back to GitHub.',
+    kicker: 'PULL REQUEST REVIEW',
+    title: 'Findings, ready to post.',
+    summary: 'The app inspects the change, drafts findings, and waits for the reviewer before posting.',
+    steps: 'pull request|inspect|draft|review gate|post',
+  },
+  {
+    id: 'inbox-manager',
+    label: 'Inbox Manager',
+    icon: 'inbox',
+    description: 'Agent triage for your mailbox — the agent can never send; every outbound reply gates on you.',
+    kicker: 'INBOX MANAGER',
+    title: 'Triage first. You decide what sends.',
+    summary: 'Messages are classified and replies are drafted, but every outbound action waits for approval.',
+    steps: 'message|triage|draft|approval|send',
+  },
+  {
+    id: 'incident-response',
+    label: 'Incident Response',
+    icon: 'bell',
+    description: 'Investigates alerts, gathers evidence, and asks before taking action.',
+    kicker: 'INCIDENT RESPONSE',
+    title: 'Evidence before action.',
+    summary: 'The app investigates the alert and assembles the case before a person authorizes the response.',
+    steps: 'alert|investigate|evidence|approval|action',
+  },
+  {
+    id: 'panel',
+    label: 'Panel',
+    icon: 'message-square',
+    description: 'Pressure-tests a decision, then parks for the human call.',
+  },
+];
+---
+
+<svg class="product-icon-sprite" aria-hidden="true" focusable="false">
+  <symbol id="product-icon-hammer" viewBox="0 0 24 24">
+    <path d="m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9"></path>
+    <path d="m18 15 4-4"></path>
+    <path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"></path>
+  </symbol>
+  <symbol id="product-icon-git-pull-request" viewBox="0 0 24 24">
+    <circle cx="18" cy="18" r="3"></circle>
+    <circle cx="6" cy="6" r="3"></circle>
+    <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+    <path d="M6 9v12"></path>
+  </symbol>
+  <symbol id="product-icon-inbox" viewBox="0 0 24 24">
+    <path d="M22 12h-6l-2 3h-4l-2-3H2"></path>
+    <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z"></path>
+  </symbol>
+  <symbol id="product-icon-bell" viewBox="0 0 24 24">
+    <path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
+    <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path>
+  </symbol>
+  <symbol id="product-icon-message-square" viewBox="0 0 24 24">
+    <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2Z"></path>
+  </symbol>
+  <symbol id="product-icon-settings" viewBox="0 0 24 24">
+    <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </symbol>
+</svg>
+
+<div class="product-console" data-product-console>
+  <header class="product-console-bar">
+    <div class="product-console-left">
+      <span class="product-console-brand">
+        <img src="/favicon.svg" alt="" width="18" height="18" aria-hidden="true" />
+        <span>druks</span>
+      </span>
+      <span class="product-console-separator" aria-hidden="true">/</span>
+
+      <div class="product-switcher">
+        <button
+          class="product-switcher-trigger"
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="product-app-menu"
+          data-product-trigger
+        >
+          <svg class="product-switcher-glyph" aria-hidden="true"><use data-product-icon-use href="#product-icon-message-square"></use></svg>
+          <span data-product-label>Panel</span>
+          <span class="product-switcher-caret" aria-hidden="true">▾</span>
+        </button>
+        <span class="product-switcher-nudge" aria-hidden="true" data-product-nudge>Click me</span>
+
+        <div class="product-switcher-menu" id="product-app-menu" role="listbox" hidden data-product-menu>
+          {apps.map((app) => (
+            <button
+              class:list={['product-switcher-option', { 'is-selected': app.id === 'panel' }]}
+              type="button"
+              role="option"
+              aria-selected={app.id === 'panel' ? 'true' : 'false'}
+              data-product-option
+              data-app={app.id}
+              data-label={app.label}
+              data-icon={app.icon}
+              data-kicker={app.kicker}
+              data-title={app.title}
+              data-summary={app.summary}
+              data-steps={app.steps}
+            >
+              <svg class="product-switcher-option-glyph" aria-hidden="true"><use href={`#product-icon-${app.icon}`}></use></svg>
+              <span class="product-switcher-option-copy">
+                <strong>{app.label}</strong>
+                <span>{app.description}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="product-console-status" aria-hidden="true">
+      <span>∿ events</span>
+      <span class="product-console-quota">C 72%</span>
+      <span class="product-console-quota">X 84%</span>
+      <span class="product-console-settings"><svg aria-hidden="true"><use href="#product-icon-settings"></use></svg></span>
+    </div>
+  </header>
+
+  <div class="product-console-screen" aria-live="polite">
+    <section class="product-panel-preview" data-panel-view>
+      <div class="product-panel-workspace">
+        <aside class="product-panel-list">
+          <div class="product-panel-list-head"><span>Decisions</span><span>3</span></div>
+          <span class="product-panel-new">New decision</span>
+          <div class="product-panel-list-item is-active">
+            <div><strong>Chat-based harness</strong><small>NEEDS YOUR CALL</small></div>
+            <p>Should I create a new chat-based harness?</p>
+          </div>
+          <div class="product-panel-list-item">
+            <div><strong>Package-owned UI</strong><small>PROCEED</small></div>
+            <p>Should apps ship their own dashboard UI?</p>
+          </div>
+          <div class="product-panel-list-item">
+            <div><strong>Default reasoning effort</strong><small>RUNNING</small></div>
+            <p>Should agents choose their own effort?</p>
+          </div>
+        </aside>
+
+        <article class="product-panel-decision">
+          <div class="product-panel-meta">
+            <span>NEEDS YOUR CALL</span>
+          </div>
+          <h4 class="product-panel-question">Should I create a new chat-based harness?</h4>
+          <p class="product-panel-context">The current harness works. This one would add a chat box, because apparently every product must eventually become chat.</p>
+
+          <div class="product-panel-advisors">
+            <section class="product-panel-advisor is-opportunity">
+              <div><span>OPPORTUNITY</span><small>86% CONFIDENCE</small></div>
+              <em>PROCEED</em>
+              <h5>Everyone understands a chat box.</h5>
+              <p>It could make the first five minutes of a demo instantly legible.</p>
+            </section>
+            <section class="product-panel-advisor is-risk">
+              <div><span>RISK</span><small>94% CONFIDENCE</small></div>
+              <em>PASS</em>
+              <h5>The interface could become the product by accident.</h5>
+              <p>Chat turns durable work into a conversation and invites scope creep.</p>
+            </section>
+            <section class="product-panel-advisor is-execution">
+              <div><span>EXECUTION</span><small>91% CONFIDENCE</small></div>
+              <em>REVISE</em>
+              <h5>The chat box is the easy part.</h5>
+              <p>Session state, tools, recovery, and honest failure semantics are the work.</p>
+            </section>
+          </div>
+
+          <div class="product-panel-moderator">
+            <div><span>MODERATOR</span><strong>Recommendation: pass</strong></div>
+            <p>Prototype the interaction if it helps onboarding. Do not turn durable jobs into chat sessions just to look familiar.</p>
+            <div class="product-panel-call"><span>YOUR CALL</span><span>Proceed</span><span>Revise</span><span class="is-selected">Pass</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="product-generic-preview" hidden data-generic-view>
+      <div class="product-generic-copy">
+        <p data-preview-kicker></p>
+        <h3 data-preview-title></h3>
+        <span data-preview-summary></span>
+      </div>
+      <div class="product-generic-workflow" data-preview-steps></div>
+      <div class="product-generic-record">
+        <span>RUN / LIVE</span>
+        <strong>Completed work stays completed.</strong>
+        <small>Every agent call leaves its prompt, transcript, output, and cost behind.</small>
+      </div>
+    </section>
+  </div>
+</div>
