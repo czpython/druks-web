@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "postbuild": "find dist -name .DS_Store -delete",
     "preview": "astro preview",
-    "deploy": "astro build && rsync -az --delete dist/ druks:/home/druks-app/site/ && ssh druks chown -R druks-app:druks-app /home/druks-app/site"
+    "deploy": "npm run build && rsync -az --delete dist/ druks:/home/druks-app/site/ && ssh druks chown -R druks-app:druks-app /home/druks-app/site"
   },
   "devDependencies": {
     "@fontsource-variable/geist": "^5.2.9",
