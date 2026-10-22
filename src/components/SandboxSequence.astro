@@ -315,6 +315,8 @@
   }
 
   .sandbox-console {
+    --cyan: var(--accent);
+    --cyan-bright: var(--accent);
     margin-top: clamp(42px, 5vw, 66px);
     border: 1px solid var(--demo-border);
     border-top: 3px solid var(--cyan);
@@ -405,7 +407,7 @@
     overflow: hidden;
     padding: 0 14px;
     border-width: 0;
-    background: rgb(77 212 244 / 5%);
+    background: color-mix(in srgb, var(--brand) 5%, var(--surface));
     opacity: 0;
     transform: translateY(-8px);
   }
@@ -414,7 +416,7 @@
     max-height: 180px;
     padding: 14px;
     border-width: 1px;
-    border-color: rgb(77 212 244 / 54%);
+    border-color: color-mix(in srgb, var(--brand) 54%, var(--border));
     opacity: 1;
     transform: translateY(0);
   }
@@ -427,7 +429,7 @@
     width: 6px;
     height: 6px;
     background: var(--cyan);
-    box-shadow: 0 0 10px rgb(77 212 244 / 50%);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--brand) 50%, transparent);
   }
 
   .sandbox-console[data-phase='working'] .sandbox-status-dot {
@@ -656,7 +658,7 @@
   }
 
   .sandbox-events li.is-current {
-    background: linear-gradient(90deg, rgb(77 212 244 / 8%), transparent 76%);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--brand) 8%, transparent), transparent 76%);
   }
 
   .sandbox-events time,
@@ -720,14 +722,14 @@
   }
 
   .sandbox-table li strong {
-    color: #94d82d;
+    color: var(--success);
     font-size: 8px;
     font-weight: 560;
     text-transform: uppercase;
   }
 
   .sandbox-table li.is-blocked strong {
-    color: #ff6b7b;
+    color: var(--danger);
   }
 
   .sandbox-table-summary {
@@ -738,11 +740,11 @@
   }
 
   .sandbox-table-summary strong {
-    color: #94d82d;
+    color: var(--success);
   }
 
   .sandbox-table-summary span {
-    color: #ff6b7b;
+    color: var(--danger);
   }
 
   @keyframes sandbox-status-pulse {

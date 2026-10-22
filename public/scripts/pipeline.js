@@ -18,6 +18,7 @@
     const dragon = new Image();
     const panorama = new Image();
     let dragonLayer = null;
+    let panoramaLayer = null;
     let width = 0;
     let height = 0;
     let pixelRatio = 1;
@@ -115,7 +116,7 @@
 
       context.globalAlpha = 0.64;
       context.drawImage(
-        panorama,
+        panoramaLayer,
         sourceX,
         sourceY,
         sourceWidth,
@@ -143,8 +144,8 @@
       const drawLeft = mobile ? width - drawWidth + 26 : width - drawWidth * 0.96;
 
       context.save();
-      context.globalCompositeOperation = 'screen';
-      context.globalAlpha = mobile ? 0.76 : 0.9;
+      context.globalCompositeOperation = 'source-over';
+      context.globalAlpha = 1;
       context.drawImage(dragonLayer, drawLeft, drawTop - pageScroll, drawWidth, drawHeight);
       context.restore();
 
@@ -227,6 +228,7 @@
     ])
       .then(() => {
         dragonLayer = keyBlack(dragon, 20, 68);
+        panoramaLayer = keyBlack(panorama, 20, 68);
         imagesReady = true;
         canvas.dataset.state = 'ready';
         canvas.dataset.motion = reducedMotion ? 'static' : 'scroll-linked';

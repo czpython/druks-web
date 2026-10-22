@@ -1,0 +1,12 @@
+---
+interface Props {
+  variant?: 'wordmark' | 'mark-only';
+}
+
+const { variant = 'wordmark' } = Astro.props;
+---
+
+<span class:list={['brand-lockup', { 'mark-only': variant === 'mark-only' }]}>
+  <span class="brand-lockup-mark" aria-hidden="true"></span>
+  {variant === 'wordmark' && <span>Druks</span>}
+</span>

@@ -5,6 +5,7 @@ import '@fontsource-variable/newsreader';
 import DurabilitySequence from '../components/DurabilitySequence.astro';
 import ProductConsole from '../components/ProductConsole.astro';
 import SandboxSequence from '../components/SandboxSequence.astro';
+import BrandLockup from '../components/BrandLockup.astro';
 import '../styles/global.css';
 
 const siteTitle = 'Druks — The self-hosted home for durable agent apps';
@@ -53,7 +54,65 @@ const websiteJsonLd = {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#0a0a0d" />
+    <meta name="theme-color" content="#f7f7f7" />
+    <script is:inline>
+      const themeStorageKey = 'druks:website-theme';
+      try {
+        const savedTheme = localStorage.getItem(themeStorageKey);
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          document.documentElement.dataset.theme = savedTheme;
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+      } catch {
+        document.documentElement.removeAttribute('data-theme');
+      }
+      const updateThemeColor = () => {
+        const background = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', background);
+      };
+      window.addEventListener('DOMContentLoaded', () => {
+        updateThemeColor();
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+        document.querySelectorAll('[data-theme-select]').forEach((select) => {
+          let initialTheme = 'system';
+          try {
+            const storedTheme = localStorage.getItem(themeStorageKey);
+            initialTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'system';
+          } catch {
+            // System is the safe fallback when browser storage is unavailable.
+          }
+          select.value = initialTheme;
+          select.closest('.theme-control').dataset.currentTheme = initialTheme;
+          select.addEventListener('change', () => {
+            try {
+              if (select.value === 'system') {
+                localStorage.removeItem(themeStorageKey);
+                document.documentElement.removeAttribute('data-theme');
+              } else {
+                localStorage.setItem(themeStorageKey, select.value);
+                document.documentElement.dataset.theme = select.value;
+              }
+            } catch {
+              document.documentElement.removeAttribute('data-theme');
+              select.value = 'system';
+            }
+            document.querySelectorAll('[data-theme-select]').forEach((copy) => {
+              copy.value = select.value;
+              copy.closest('.theme-control').dataset.currentTheme = select.value;
+            });
+            updateThemeColor();
+          });
+        });
+        systemTheme.addEventListener('change', () => {
+          try {
+            if (!localStorage.getItem(themeStorageKey)) updateThemeColor();
+          } catch {
+            updateThemeColor();
+          }
+        });
+      });
+    </script>
     <link rel="preload" as="image" href="/assets/art/hero-druk-complete-v3.webp" />
     <link rel="preload" as="image" href="/assets/art/storm-panorama-v2.webp" />
     <script src="/scripts/pipeline.js?v=8" defer></script>
@@ -74,20 +133,24 @@ const websiteJsonLd = {
         <path d="M12 1.5a9.2 9.2 0 1 1 0 18.4 9.2 9.2 0 0 1 0-18.4Zm-3.6 4A5.7 5.7 0 0 0 6 8.7c-.2.8.8 1.3 1.4.7a7 7 0 0 1 3.4-2.1c.9-.2.8-1.5-.1-1.8a4.7 4.7 0 0 0-2.3 0Z"></path>
         <path d="M5.2 19.2c2.1 1.9 4.8 3.1 7.7 3.1 2.4 0 4.7-.7 6.6-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
       </symbol>
+      <symbol id="glyph-theme-system" viewBox="0 0 20 20">
+        <rect x="2.5" y="3" width="15" height="10.5" rx="1.4"></rect>
+        <path d="M7 17h6M10 13.5V17"></path>
+      </symbol>
+      <symbol id="glyph-theme-light" viewBox="0 0 20 20">
+        <circle cx="10" cy="10" r="3.2"></circle>
+        <path d="M10 1.7v2M10 16.3v2M1.7 10h2M16.3 10h2M4.1 4.1l1.4 1.4m9 9 1.4 1.4m0-11.8-1.4 1.4m-9 9-1.4 1.4"></path>
+      </symbol>
+      <symbol id="glyph-theme-dark" viewBox="0 0 20 20">
+        <path d="M16.8 12.4A7.2 7.2 0 0 1 7.6 3.2a7.4 7.4 0 1 0 9.2 9.2Z"></path>
+      </symbol>
+      <symbol id="glyph-chevron-down" viewBox="0 0 12 12">
+        <path d="m3 4.5 3 3 3-3"></path>
+      </symbol>
     </svg>
 
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="Druks home">
-        <img
-          class="brand-mark"
-          src="/brand-mark.svg"
-          width="64"
-          height="64"
-          alt=""
-          aria-hidden="true"
-        />
-        <span class="brand-word">druks</span>
-      </a>
+      <a class="brand" href="#top" aria-label="Druks home"><BrandLockup /></a>
 
       <nav class="desktop-nav" aria-label="Primary navigation">
         <a href="#platform">platform</a>
@@ -95,6 +158,19 @@ const websiteJsonLd = {
         <a href="#ship">software factory</a>
         <a href="https://docs.druks.ai/" target="_blank" rel="noopener noreferrer">docs</a>
         <a href="https://druks.ai/blog">blog</a>
+        <div class="theme-control">
+          <span class="theme-control-display" aria-hidden="true">
+            <svg data-theme-icon="system" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-system"></use></svg>
+            <svg data-theme-icon="light" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-light"></use></svg>
+            <svg data-theme-icon="dark" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-dark"></use></svg>
+            <svg class="theme-control-chevron" viewBox="0 0 12 12" focusable="false"><use href="#glyph-chevron-down"></use></svg>
+          </span>
+          <select data-theme-select aria-label="Color theme">
+            <option value="system">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
         <a
           class="github-link"
           href="https://github.com/czpython/druks"
@@ -118,7 +194,22 @@ const websiteJsonLd = {
           <a href="https://docs.druks.ai/" target="_blank" rel="noopener noreferrer">docs</a>
           <a href="https://druks.ai/blog">blog</a>
           <a href="https://github.com/czpython/druks" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a class="nav-cta" href="#start">Get started</a>
+          <div class="mobile-theme-actions">
+            <div class="theme-control">
+              <span class="theme-control-display" aria-hidden="true">
+                <svg data-theme-icon="system" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-system"></use></svg>
+                <svg data-theme-icon="light" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-light"></use></svg>
+                <svg data-theme-icon="dark" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-dark"></use></svg>
+                <svg class="theme-control-chevron" viewBox="0 0 12 12" focusable="false"><use href="#glyph-chevron-down"></use></svg>
+              </span>
+              <select data-theme-select aria-label="Color theme">
+                <option value="system">System</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
+            <a class="nav-cta" href="#start">Get started</a>
+          </div>
         </nav>
       </details>
     </header>
@@ -344,17 +435,7 @@ panel = <span class="code-string">"druks_panel.app:Panel"</span>
 
     <footer class="site-footer">
       <div class="wrap footer-grid">
-        <a class="footer-brand" href="#top" aria-label="Druks, back to the top">
-          <img
-            class="footer-mark"
-            src="/assets/logos/web/DruksLogo_Cyan.svg"
-            width="3000"
-            height="3427"
-            alt=""
-            aria-hidden="true"
-          />
-          <span>druks</span>
-        </a>
+        <a class="footer-brand" href="#top" aria-label="Druks, back to the top"><BrandLockup /></a>
         <p>{siteTitle}</p>
         <div class="footer-links">
           <a href="https://github.com/czpython/druks/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT license</a>

@@ -329,12 +329,16 @@
   }
 
   .run-trace {
+    --cyan: var(--accent);
+    --cyan-bright: var(--accent);
+    --trace-rail: color-mix(in srgb, var(--surface-3) 90%, transparent);
+    --trace-grid: color-mix(in srgb, var(--border-strong) 24%, transparent);
     margin-top: clamp(40px, 5vw, 64px);
     overflow: hidden;
     border: 1px solid var(--demo-border);
     border-top: 3px solid var(--cyan);
     background: var(--demo-canvas);
-    color: #bcc3ce;
+    color: var(--text-secondary);
     font-family: var(--font-mono);
   }
 
@@ -362,17 +366,17 @@
   }
 
   .trace-toolbar span {
-    color: #9da6b4;
+    color: var(--text-secondary);
   }
 
   .trace-toolbar strong {
-    color: #eef1f4;
+    color: var(--text);
     font-weight: 600;
   }
 
   .trace-run-state {
     margin-left: auto;
-    color: #c5ccd5 !important;
+    color: var(--text-secondary) !important;
   }
 
   .run-trace:not([data-phase='interrupted']) .trace-run-state {
@@ -396,7 +400,7 @@
   .trace-axis {
     align-items: center;
     padding-bottom: 14px;
-    color: #969eaa;
+    color: var(--text-tertiary);
     font-size: 7px;
     letter-spacing: 0.13em;
     text-transform: uppercase;
@@ -422,11 +426,11 @@
   .trace-row {
     min-height: 70px;
     align-items: center;
-    border-top: 1px solid rgb(151 163 178 / 14%);
+    border-top: 1px solid var(--border-soft);
   }
 
   .trace-row:last-child {
-    border-bottom: 1px solid rgb(151 163 178 / 14%);
+    border-bottom: 1px solid var(--border-soft);
   }
 
   .trace-row-agent {
@@ -440,12 +444,12 @@
   }
 
   .trace-label span {
-    color: #8f98a6;
+    color: var(--text-tertiary);
     font-size: 8px;
   }
 
   .trace-label strong {
-    color: #f0f2f4;
+    color: var(--text);
     font-size: 13px;
     font-weight: 560;
   }
@@ -454,8 +458,8 @@
     position: relative;
     height: 34px;
     background:
-      linear-gradient(90deg, rgb(151 163 178 / 10%) 1px, transparent 1px) 0 0 / 25% 100%,
-      rgb(45 49 57 / 58%);
+      linear-gradient(90deg, var(--trace-grid) 1px, transparent 1px) 0 0 / 25% 100%,
+      var(--trace-rail);
   }
 
   .trace-attempts {
@@ -471,8 +475,8 @@
   .trace-bar {
     top: 7px;
     height: 20px;
-    background: rgb(129 143 157 / 13%);
-    box-shadow: inset 0 0 0 1px rgb(151 163 178 / 32%);
+    background: color-mix(in srgb, var(--surface-3) 86%, transparent);
+    box-shadow: inset 0 0 0 1px var(--border);
   }
 
   .trace-bar::before {
@@ -480,7 +484,7 @@
     z-index: 2;
     inset: 0 auto 0 0;
     width: 3px;
-    background: #8c99a7;
+    background: var(--text-tertiary);
     content: '';
   }
 
@@ -489,7 +493,7 @@
     position: absolute;
     inset: 0;
     display: block;
-    background: linear-gradient(90deg, rgb(151 163 178 / 24%), rgb(151 163 178 / 7%));
+    background: linear-gradient(90deg, color-mix(in srgb, var(--text-secondary) 24%, transparent), color-mix(in srgb, var(--text-secondary) 7%, transparent));
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 900ms var(--ease-out);
@@ -508,8 +512,8 @@
   .trace-bar-publish {
     left: 86%;
     width: 12%;
-    border: 1px dashed rgb(151 163 178 / 44%);
-    background: rgb(151 163 178 / 4%);
+    border: 1px dashed var(--border-strong);
+    background: color-mix(in srgb, var(--surface) 96%, transparent);
     box-shadow: none;
   }
 
@@ -518,7 +522,7 @@
   }
 
   .trace-bar-publish i {
-    background: linear-gradient(90deg, rgb(77 212 244 / 38%), rgb(77 212 244 / 12%));
+    background: linear-gradient(90deg, color-mix(in srgb, var(--brand) 38%, transparent), color-mix(in srgb, var(--brand) 12%, transparent));
     transform: scaleX(0);
     transition: transform 950ms var(--ease-out);
   }
@@ -549,13 +553,13 @@
     top: 7px;
     left: 46%;
     width: 17%;
-    background: rgb(202 208 216 / 9%);
-    box-shadow: inset 0 0 0 1px rgb(202 208 216 / 42%);
-    color: #d8dde3;
+    background: color-mix(in srgb, var(--surface-3) 91%, transparent);
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+    color: var(--text);
   }
 
   .trace-attempt-one i {
-    background: linear-gradient(90deg, rgb(202 208 216 / 15%), transparent);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--text-secondary) 15%, transparent), transparent);
     transition-duration: 1050ms;
   }
 
@@ -563,18 +567,18 @@
     right: 15%;
     bottom: 7px;
     width: 19%;
-    border: 1px dashed rgb(151 163 178 / 38%);
-    color: #aeb8c6;
+    border: 1px dashed var(--border);
+    color: var(--text-secondary);
   }
 
   .trace-attempt-two i {
-    background: linear-gradient(90deg, rgb(77 212 244 / 42%), rgb(77 212 244 / 13%));
+    background: linear-gradient(90deg, color-mix(in srgb, var(--brand) 42%, transparent), color-mix(in srgb, var(--brand) 13%, transparent));
     transform: scaleX(0);
     transition: transform 1550ms var(--ease-out);
   }
 
   .trace-state {
-    color: #a6afbc;
+    color: var(--text-secondary);
     font-size: 8px;
     letter-spacing: 0.06em;
     text-align: right;
@@ -583,7 +587,7 @@
 
   .trace-row[data-state='completed'] .trace-state,
   .trace-row[data-state='reused'] .trace-state {
-    color: #b9c1cb;
+    color: var(--text-secondary);
   }
 
   .trace-row[data-state='running'] .trace-state {
@@ -602,7 +606,7 @@
 
   .trace-row[data-state='running'] .trace-bar i,
   .trace-row-agent[data-state='first-attempt'] .trace-attempt-one i {
-    background: linear-gradient(90deg, rgb(77 212 244 / 44%), rgb(77 212 244 / 12%));
+    background: linear-gradient(90deg, color-mix(in srgb, var(--brand) 44%, transparent), color-mix(in srgb, var(--brand) 12%, transparent));
   }
 
   .trace-row[data-state='running'] .trace-bar i,
@@ -616,7 +620,7 @@
   }
 
   .trace-row-agent[data-state='interrupted'] .trace-state {
-    color: #d8dde3;
+    color: var(--text);
   }
 
   .trace-restart-guide {
@@ -637,7 +641,7 @@
     bottom: 0;
     left: 64%;
     width: 1px;
-    border-left: 1px dashed rgb(194 202 212 / 38%);
+    border-left: 1px dashed var(--border-strong);
     transition:
       border-color 220ms ease,
       box-shadow 220ms ease;
@@ -648,8 +652,8 @@
     top: -1px;
     left: 64%;
     padding: 3px 7px;
-    background: #242831;
-    color: #aab2be;
+    background: var(--surface-3);
+    color: var(--text-secondary);
     font-size: 7px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -664,7 +668,7 @@
   .run-trace[data-phase='publishing'] .trace-restart-guide i,
   .run-trace[data-phase='complete'] .trace-restart-guide i {
     border-color: var(--cyan);
-    box-shadow: 0 0 14px rgb(77 212 244 / 25%);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--brand) 25%, transparent);
   }
 
   .run-trace[data-phase='recovering'] .trace-restart-guide span,
@@ -687,12 +691,12 @@
   .run-trace[data-phase='publishing'] .trace-attempt-two,
   .run-trace[data-phase='complete'] .trace-attempt-two {
     border-style: solid;
-    color: #effcff;
+    color: var(--text);
   }
 
   .run-trace[data-phase='publishing'] .trace-bar-publish,
   .run-trace[data-phase='complete'] .trace-bar-publish {
-    border-color: rgb(77 212 244 / 48%);
+    border-color: color-mix(in srgb, var(--brand) 48%, transparent);
     border-style: solid;
   }
 
