@@ -3776,7 +3776,7 @@ main section > .wrap,
 
 .product-panel-moderator > div:first-child span,
 .product-panel-call > span:first-child {
-  color: var(--brand);
+  color: var(--accent);
   font-family: var(--font-mono);
   font-size: 8px;
   letter-spacing: 0.1em;
