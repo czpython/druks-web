@@ -6,6 +6,7 @@ import DurabilitySequence from '../components/DurabilitySequence.astro';
 import ProductConsole from '../components/ProductConsole.astro';
 import SandboxSequence from '../components/SandboxSequence.astro';
 import BrandLockup from '../components/BrandLockup.astro';
+import ThemeControl from '../components/ThemeControl.astro';
 import '../styles/global.css';
 
 const siteTitle = 'Druks — The self-hosted home for durable agent apps';
@@ -54,6 +55,8 @@ const websiteJsonLd = {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0c0c0c" />
     <meta name="theme-color" content="#f7f7f7" />
     <script is:inline>
       const themeStorageKey = 'druks:website-theme';
@@ -69,7 +72,7 @@ const websiteJsonLd = {
       }
       const updateThemeColor = () => {
         const background = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', background);
+        document.querySelector('meta[name="theme-color"]:not([media])')?.setAttribute('content', background);
       };
       window.addEventListener('DOMContentLoaded', () => {
         updateThemeColor();
@@ -86,16 +89,12 @@ const websiteJsonLd = {
           select.closest('.theme-control').dataset.currentTheme = initialTheme;
           select.addEventListener('change', () => {
             try {
-              if (select.value === 'system') {
-                localStorage.removeItem(themeStorageKey);
-                document.documentElement.removeAttribute('data-theme');
-              } else {
-                localStorage.setItem(themeStorageKey, select.value);
-                document.documentElement.dataset.theme = select.value;
-              }
+              if (select.value === 'system') document.documentElement.removeAttribute('data-theme');
+              else document.documentElement.dataset.theme = select.value;
+              if (select.value === 'system') localStorage.removeItem(themeStorageKey);
+              else localStorage.setItem(themeStorageKey, select.value);
             } catch {
-              document.documentElement.removeAttribute('data-theme');
-              select.value = 'system';
+              // Applying the requested theme does not depend on storage being available.
             }
             document.querySelectorAll('[data-theme-select]').forEach((copy) => {
               copy.value = select.value;
@@ -158,19 +157,7 @@ const websiteJsonLd = {
         <a href="#ship">software factory</a>
         <a href="https://docs.druks.ai/" target="_blank" rel="noopener noreferrer">docs</a>
         <a href="https://druks.ai/blog">blog</a>
-        <div class="theme-control">
-          <span class="theme-control-display" aria-hidden="true">
-            <svg data-theme-icon="system" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-system"></use></svg>
-            <svg data-theme-icon="light" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-light"></use></svg>
-            <svg data-theme-icon="dark" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-dark"></use></svg>
-            <svg class="theme-control-chevron" viewBox="0 0 12 12" focusable="false"><use href="#glyph-chevron-down"></use></svg>
-          </span>
-          <select data-theme-select aria-label="Color theme">
-            <option value="system">System</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
+        <ThemeControl />
         <a
           class="github-link"
           href="https://github.com/czpython/druks"
@@ -195,19 +182,7 @@ const websiteJsonLd = {
           <a href="https://druks.ai/blog">blog</a>
           <a href="https://github.com/czpython/druks" target="_blank" rel="noopener noreferrer">GitHub</a>
           <div class="mobile-theme-actions">
-            <div class="theme-control">
-              <span class="theme-control-display" aria-hidden="true">
-                <svg data-theme-icon="system" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-system"></use></svg>
-                <svg data-theme-icon="light" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-light"></use></svg>
-                <svg data-theme-icon="dark" viewBox="0 0 20 20" focusable="false"><use href="#glyph-theme-dark"></use></svg>
-                <svg class="theme-control-chevron" viewBox="0 0 12 12" focusable="false"><use href="#glyph-chevron-down"></use></svg>
-              </span>
-              <select data-theme-select aria-label="Color theme">
-                <option value="system">System</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-              </select>
-            </div>
+            <ThemeControl />
             <a class="nav-cta" href="#start">Get started</a>
           </div>
         </nav>

@@ -8,15 +8,11 @@
   --demo-header: color-mix(in srgb, var(--surface-2) 96%, transparent);
   --demo-subpanel: color-mix(in srgb, var(--surface-2) 88%, transparent);
   --demo-border: var(--border);
-  --demo-text: var(--text);
-  --demo-muted: var(--text-secondary);
-  --demo-faint: var(--text-tertiary);
   --text-mid: var(--text-secondary);
   --text-muted: var(--text-tertiary);
   --cyan: var(--accent);
   --cyan-bright: var(--accent);
   --cyan-ink: var(--on-accent);
-  --demo-interruption-outline: var(--border-strong);
   --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, Menlo, monospace;
   --font-display: 'Newsreader Variable', Georgia, serif;
@@ -61,16 +57,16 @@ body {
   height: 100%;
   pointer-events: none;
   mix-blend-mode: screen;
-  opacity: 0.35;
+  opacity: 0.82;
 }
 
 :root[data-theme="light"] .storm-canvas {
-  mix-blend-mode: normal;
+  display: none;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) .storm-canvas {
-    mix-blend-mode: normal;
+    display: none;
   }
 }
 
@@ -322,7 +318,7 @@ main section {
   height: var(--header-h);
   padding-inline: max(28px, calc((100vw - var(--maxw)) / 2 + 40px));
   border: 0;
-  background: transparent;
+  background: color-mix(in srgb, var(--surface) 30%, transparent);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
@@ -675,7 +671,7 @@ main section {
 }
 
 .demo-step[data-state='interrupted'] {
-  border-color: var(--demo-interruption-outline);
+  border-color: var(--border-strong);
   border-style: dashed;
   background: rgb(250 250 250 / 5%);
 }
@@ -996,7 +992,7 @@ main section {
 }
 
 .legend-agent {
-  background: #6b8ea0;
+  background: var(--chart-series-2);
 }
 
 .graph-legend .glyph {
@@ -1029,7 +1025,7 @@ main section {
 .graph-lane-agent {
   bottom: 22px;
   left: 22px;
-  color: rgb(154 180 191 / 82%);
+  color: var(--text-secondary);
 }
 
 .graph-paths {
@@ -1049,7 +1045,7 @@ main section {
 }
 
 .graph-path-base {
-  stroke: #323946;
+  stroke: var(--border-strong);
   stroke-width: 2;
 }
 
@@ -1064,7 +1060,7 @@ main section {
 .graph-current {
   fill: var(--cyan-bright);
   opacity: 0;
-  stroke: rgb(10 10 13 / 92%);
+  stroke: var(--surface);
   stroke-width: 3;
   transition: opacity 120ms ease;
   vector-effect: non-scaling-stroke;
@@ -1104,8 +1100,8 @@ main section {
   left: -5px;
   width: 10px;
   height: 10px;
-  border: 2px solid rgb(10 10 13 / 95%);
-  background: #697487;
+  border: 2px solid var(--surface);
+  background: var(--text-tertiary);
   content: '';
   transform: translateY(-50%) rotate(45deg);
   transition:
@@ -1119,14 +1115,14 @@ main section {
   width: 100%;
   min-height: 124px;
   padding: 17px 18px 16px;
-  border: 1px solid #303540;
+  border: 1px solid var(--border-strong);
   border-radius: 0;
   appearance: none;
   flex-direction: column;
   background:
     linear-gradient(90deg, var(--node-accent), transparent) 0 0 / 42px 2px no-repeat,
     linear-gradient(0deg, var(--node-accent), transparent) 100% 100% / 2px 26px no-repeat,
-    rgb(10 10 13 / 96%);
+    var(--surface);
   clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
   color: inherit;
   cursor: pointer;
@@ -1139,7 +1135,7 @@ main section {
 }
 
 .station-trigger:hover {
-  border-color: color-mix(in srgb, var(--node-accent) 62%, #303540);
+  border-color: color-mix(in srgb, var(--node-accent) 62%, var(--border-strong));
   transform: translateY(-3px);
 }
 
@@ -1181,7 +1177,7 @@ main section {
 }
 
 .node-agent {
-  --node-accent: #6b8ea0;
+  --node-accent: var(--chart-series-2);
 }
 
 .node-owner,
@@ -1196,7 +1192,7 @@ main section {
   position: absolute;
   top: 16px;
   right: 17px;
-  color: #626c7d;
+  color: var(--text-tertiary);
   font-size: 8px;
   letter-spacing: 0.08em;
 }
@@ -1211,7 +1207,7 @@ main section {
 
 .station-name {
   display: block;
-  color: #d5d5db;
+  color: var(--text);
   font-size: 15px;
   font-weight: 600;
 }
@@ -1276,7 +1272,7 @@ main section {
 }
 
 .station.done .station-trigger {
-  border-color: color-mix(in srgb, var(--node-accent) 38%, #303540);
+  border-color: color-mix(in srgb, var(--node-accent) 38%, var(--border-strong));
 }
 
 .station.active,
@@ -1297,7 +1293,7 @@ main section {
   background:
     linear-gradient(90deg, var(--node-accent), transparent) 0 0 / 64px 3px no-repeat,
     linear-gradient(0deg, var(--node-accent), transparent) 100% 100% / 3px 38px no-repeat,
-    color-mix(in srgb, var(--node-accent) 7%, rgb(10 10 13 / 98%));
+    color-mix(in srgb, var(--node-accent) 7%, var(--surface));
   box-shadow:
     0 16px 42px color-mix(in srgb, var(--node-accent) 12%, transparent),
     inset 0 0 30px color-mix(in srgb, var(--node-accent) 4%, transparent);
@@ -1333,7 +1329,7 @@ main section {
   width: 19px;
   height: 19px;
   padding: 3px;
-  background: rgb(10 10 13 / 98%);
+  background: var(--surface);
   color: var(--cyan);
 }
 
@@ -1368,13 +1364,13 @@ main section {
   min-height: 74px;
   padding: 18px 22px;
   border-left: 3px solid var(--cyan);
-  background: rgb(15 15 19 / 96%);
+  background: var(--surface);
   color: var(--text-mid);
   font-size: 11px;
 }
 
 .readout-sequence {
-  color: #6f7888;
+  color: var(--text-tertiary);
   font-size: 9px;
   letter-spacing: 0.1em;
 }
@@ -1388,7 +1384,7 @@ main section {
 }
 
 .ship-graph[data-active-layer='agent'] .readout-stage {
-  color: #9ab4bf;
+  color: var(--chart-series-2);
 }
 
 .readout-message {
@@ -2211,7 +2207,6 @@ main section {
 
   .mobile-nav nav .nav-cta {
     margin-top: 0;
-    color: var(--cyan-ink);
     text-align: center;
   }
 
@@ -2685,13 +2680,6 @@ body {
   line-height: 1.6;
 }
 
-.site-header {
-  border: 0;
-  background: color-mix(in srgb, var(--surface) 30%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-}
-
 .section-band,
 .ledger-band,
 .lifted-band {
@@ -2743,8 +2731,6 @@ main section {
   margin-bottom: 22px;
   font-size: 10px;
 }
-
-
 
 
 
@@ -2866,7 +2852,7 @@ main section {
 
 .skip-link {
   border-color: var(--accent);
-  color: var(--on-accent);
+  color: var(--accent);
 }
 
 .replay-button:hover,
@@ -2928,10 +2914,6 @@ main section {
 .app-code-window,
 .install-line {
   border: 1px solid var(--border);
-  background: rgb(15 15 19 / 92%);
-}
-
-.install-line {
   background: var(--surface);
 }
 
@@ -3113,8 +3095,7 @@ main section {
   color: var(--cyan);
 }
 
-.app-code-window,
-.install-line {
+.app-code-window {
   border-top-color: var(--cyan);
 }
 
@@ -3284,8 +3265,6 @@ main section > .wrap,
 }
 
 .product-console {
-  --cyan: var(--accent);
-  --cyan-bright: var(--accent);
   --console-bg: var(--surface);
   --console-surface: var(--surface-2);
   --console-surface-raised: var(--surface-3);
@@ -3966,69 +3945,6 @@ main section > .wrap,
   );
 }
 
-.survival-demo {
-  --cyan-bright: var(--accent);
-  background: var(--demo-canvas);
-}
-
-.survival-demo .demo-row.is-dead > * {
-  opacity: 0.86;
-}
-
-.survival-demo .demo-row-label,
-.survival-demo .demo-step > span,
-.survival-demo .demo-step > small {
-  color: var(--text-secondary);
-}
-
-.survival-demo .demo-step {
-  background: var(--surface-2);
-}
-
-.survival-demo .demo-step[data-state='pending'] {
-  background: var(--surface);
-  opacity: 0.68;
-}
-
-.survival-demo .demo-step[data-state='active'],
-.survival-demo .demo-step[data-state='recorded'],
-.survival-demo .demo-step[data-state='reused'],
-.survival-demo .demo-step[data-state='complete'] {
-  background: color-mix(in srgb, var(--brand) 6%, var(--surface-2));
-}
-
-.survival-demo .demo-step[data-state='interrupted'] {
-  background: var(--surface-3);
-}
-
-.survival-demo .demo-step > strong,
-.survival-demo .demo-step[data-state='interrupted'] > strong,
-.survival-demo .demo-step[data-state='interrupted'] > small {
-  color: var(--text);
-}
-
-.survival-demo .demo-step[data-state='active'] > strong,
-.survival-demo .demo-step[data-state='active'] > small,
-.survival-demo .demo-step[data-state='recorded'] > strong,
-.survival-demo .demo-step[data-state='recorded'] > small,
-.survival-demo .demo-step[data-state='reused'] > strong,
-.survival-demo .demo-step[data-state='reused'] > small,
-.survival-demo .demo-step[data-state='complete'] > strong,
-.survival-demo .demo-step[data-state='complete'] > small,
-.survival-demo .demo-finish-copy strong {
-  color: var(--cyan-bright);
-}
-
-.survival-demo .demo-topline,
-.survival-demo .demo-restart {
-  background: var(--surface-2);
-}
-
-.survival-demo .demo-finish-copy small,
-.survival-demo .replay-button {
-  color: var(--text-mid);
-}
-
 .graph-chrome,
 .graph-readout {
   background: var(--demo-header);
@@ -4068,8 +3984,7 @@ main section > .wrap,
 
 .product-ui,
 .ship-graph,
-.app-code-window,
-.install-line {
+.app-code-window {
   border-color: var(--demo-border);
   background-color: var(--demo-canvas);
 }
@@ -4084,8 +3999,6 @@ main section > .wrap,
 }
 
 .product-console {
-  --cyan: var(--accent);
-  --cyan-bright: var(--accent);
   --console-bg: var(--surface);
   --console-surface: var(--surface-2);
   --console-surface-raised: var(--surface-3);
@@ -4113,8 +4026,7 @@ main section > .wrap,
   );
 }
 
-.app-code-window,
-.install-line {
+.app-code-window {
   border-top-color: var(--cyan);
   background:
     linear-gradient(118deg, color-mix(in srgb, var(--brand) 3%, transparent), transparent 46%),
@@ -4122,9 +4034,7 @@ main section > .wrap,
 }
 
 .install-line {
-  border-color: var(--border);
   border-top-color: var(--accent);
-  background: var(--surface);
   box-shadow: none;
 }
 
@@ -4133,11 +4043,5 @@ main section > .wrap,
     background: var(--surface);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-  }
-}
-
-@supports not (background: color-mix(in srgb, var(--surface) 30%, transparent)) {
-  .site-header {
-    background: var(--surface);
   }
 }
