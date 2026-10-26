@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "tokens:sync": "node scripts/sync-design-tokens.mjs",
+    "tokens:check": "node scripts/sync-design-tokens.mjs --check",
     "postbuild": "find dist -name .DS_Store -delete",
     "preview": "astro preview",
     "deploy": "npm run build && rsync -az --delete dist/ druks-prod-control:/home/druks-app/site/ && ssh druks-prod-control chown -R druks-app:druks-app /home/druks-app/site"
