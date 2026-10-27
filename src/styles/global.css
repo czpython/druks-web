@@ -1150,7 +1150,7 @@ main section {
 .code-window-foot {
   justify-content: flex-start;
   padding: 13px 18px;
-  background: rgb(255 255 255 / 1.5%);
+  background: color-mix(in srgb, var(--text) 1.5%, transparent);
 }
 
 .code-window-foot span:nth-child(2) {
@@ -1349,7 +1349,7 @@ main section {
   }
 
   .mobile-nav nav a:hover {
-    background: rgb(255 255 255 / 4%);
+    background: var(--selected);
     color: var(--text);
   }
 
@@ -1419,7 +1419,7 @@ main section {
 
   .graph-canvas::after {
     z-index: -1;
-    background: linear-gradient(180deg, var(--cyan), #6b8ea0 68%, var(--cyan));
+    background: linear-gradient(180deg, var(--cyan), var(--border-strong) 68%, var(--cyan));
     transform: scaleY(var(--graph-progress));
     transition: transform 700ms var(--ease-out);
   }
